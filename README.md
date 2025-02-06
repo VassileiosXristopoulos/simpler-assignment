@@ -62,10 +62,22 @@ Make sure you have Node.js and npm installed on your machine.
 
 ### Development
 
-To start the development server, run:
+To start the Backend server, run:
+
+```bash
+npm run start-backend
+```
+
+To start the Frontend, run:
 
 ```bash
 npm run dev
+```
+
+To stop the Backend server, run:
+
+```bash
+npm run stop-backend
 ```
 
 This will start the Vite development server. You can now access your React application at `http://localhost:3000`.
