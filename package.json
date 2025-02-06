@@ -4,6 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "start-backend": "docker run -d --name simpler-assignment-backend-vassilis-christopoulos -p 8080:8080 registry.gitlab.com/saysimpler/hiring/fe-sample-api",
+    "stop-backend": "docker stop simpler-assignment-backend-vassilis-christopoulos && docker rm simpler-assignment-backend-vassilis-christopoulos",
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
