@@ -1,121 +1,124 @@
-<h1 align="center">Boilerplate React.js + TypeScript + Vite 👋</h1>
-<p>
-  <img alt="Version" src="https://img.shields.io/badge/version-0.0.0-blue.svg?cacheSeconds=2592000" />
-  <a href="#" target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
-  </a>
-  <a href="https://twitter.com/fdaciuk" target="_blank">
-    <img alt="Twitter: fdaciuk" src="https://img.shields.io/twitter/follow/fdaciuk.svg?style=social" />
-  </a>
-</p>
+# React Vite TypeScript Jest Boilerplate
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+This is a boilerplate project for kickstarting React applications using Vite, TypeScript, and Jest for testing. It's configured with essential tools and settings to help you quickly start building React apps with modern tooling.
 
-> Boilerplate to create React.js apps with Vite
+## Features
 
-## Which techs this boilerplate have in it?
+- **Vite:** A blazing fast build tool that provides near-instantaneous hot module replacement (HMR) and lightning-fast dev server.
+- **React:** A JavaScript library for building user interfaces.
+- **TypeScript:** A superset of JavaScript that adds static typing and other features to the language.
+- **Jest:** A delightful JavaScript testing framework with a focus on simplicity.
+- **Pre-configured Setup:** All necessary configurations are already set up, allowing you to focus on writing code instead of spending time configuring the project.
 
-This boilerplate is ready to be used by devs who want to start a new project using React.js, TypeScript and Jest with Vite.
+Currently, two official plugins are available:
 
-## Main configurations
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-- React.js 18+ with TypeScript;
-  - You can import "svgs" with `import { ReactComponent as MyIcon } from './icon-path.svg'`;
-  - You can import any other media (images, videos, etc) that is located inside `src` directory;
-  - You can use absolute imports, using `@` as `src` directory;
-- Eslint:
-  - [Standard](https://standardjs.com/) with some modifications;
-  - React Hooks and other React configurations with [eslint-config-react-app](https://www.npmjs.com/package/eslint-config-react-app) (same used in Create React App);
-- Automatic lint and type-checking with Husky before every commit.
+## Expanding the ESLint configuration
 
-## Usage
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-Install the dependencies:
+- Configure the top-level `parserOptions` property like this:
 
-```sh
-yarn install
+```js
+   parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: ['./tsconfig.json', './tsconfig.node.json'],
+    tsconfigRootDir: __dirname,
+   },
 ```
 
-Run dev server:
+- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
+- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
 
-```sh
-yarn dev
+## Getting Started
+
+### Prerequisites
+
+Make sure you have Node.js and npm installed on your machine.
+
+### Installation
+
+1. Clone this repository:
+
+   ```bash
+   git clone https://github.com/your-username/react-vite-ts-jest-boilerplate.git
+   ```
+
+2. Navigate into the project directory:
+
+   ```bash
+   cd react-vite-ts-jest-boilerplate
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+### Development
+
+To start the development server, run:
+
+```bash
+npm run dev
 ```
 
-You can run type-checking in watch mode in another terminal, if you may:
+This will start the Vite development server. You can now access your React application at `http://localhost:3000`.
 
-```sh
-yarn type-check --watch
+### Testing
+
+To run tests, use:
+
+```bash
+npm test
 ```
 
-## Run tests
+This will run all the test suites using Jest.
 
-```sh
-yarn test
+### Building
+
+To build your application for production, run:
+
+```bash
+npm run build
 ```
 
-## Production version
+This will generate an optimized build of your application in the `dist` directory.
 
-To generate the production version, you can run:
+## Folder Structure
 
-```sh
-yarn build
+```
+react-vite-ts-jest-boilerplate/
+├── src/                 
+│   ├── features/ui/  
+│   │   ├── footer.tsx
+│   │   ├── haeder.tsx    
+│   │   └── idnex.ts
+│   ├── pages/           
+│   │   ├── home.tsx
+│   │   ├── page-data.tsx
+│   │   └── router.tsx
+│   └── App.tsx          
+├── .eslintrc.cjs           
+├── .gitignore           
+├── index.html       
+├── LICENSE         
+├── package.json         
+├── README.md            
+├── tsconfig.json        
+├── tsconfig.node.json        
+└── vite.config.ts       
 ```
 
-All files you have to deploy will be located at the `dist` directory.
+## Contributing
 
-### Run production version locally
+Contributions are welcome! Feel free to submit pull requests or open issues for any bugs or feature requests.
 
-To check if everything will be ok in production before the deployment, you can run this command after `yarn build`:
+## License
 
-```sh
-yarn preview
-```
-
-## Author
-
-👤 **Fernando Daciuk**
-
-* Website: https://daciuk.dev
-* Twitter: [@fdaciuk](https://twitter.com/fdaciuk)
-* Github: [@fdaciuk](https://github.com/fdaciuk)
-* LinkedIn: [@fdaciuk](https://linkedin.com/in/fdaciuk)
-* Instagram : [@fdaciuk](https://instagram.com/fdaciuk)
-
-## 🤝 Contributing
-
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/fdaciuk/boilerplate-vite-react/issues). 
-
-## ✨ Contributors
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/fdaciuk"><img src="https://avatars.githubusercontent.com/u/487669?v=4?s=100" width="100px;" alt="Fernando Daciuk"/><br /><sub><b>Fernando Daciuk</b></sub></a><br /><a href="https://github.com/fdaciuk/boilerplate-vite-react/commits?author=fdaciuk" title="Code">💻</a> <a href="https://github.com/fdaciuk/boilerplate-vite-react/commits?author=fdaciuk" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/gabepinheiro"><img src="https://avatars.githubusercontent.com/u/45916330?v=4?s=100" width="100px;" alt="Gabriel Pinheiro"/><br /><sub><b>Gabriel Pinheiro</b></sub></a><br /><a href="https://github.com/fdaciuk/boilerplate-vite-react/commits?author=gabepinheiro" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://newcapital.in@gmail.com"><img src="https://avatars.githubusercontent.com/u/81476236?v=4?s=100" width="100px;" alt="NewCapital.in"/><br /><sub><b>NewCapital.in</b></sub></a><br /><a href="https://github.com/fdaciuk/boilerplate-vite-react/commits?author=SallesCosta" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://vinibispo.com.br"><img src="https://avatars.githubusercontent.com/u/48097622?v=4?s=100" width="100px;" alt="Vinícius Bispo"/><br /><sub><b>Vinícius Bispo</b></sub></a><br /><a href="https://github.com/fdaciuk/boilerplate-vite-react/commits?author=vinibispo" title="Code">💻</a></td>
-    </tr>
-  </tbody>
-</table>
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
-
-## Show your support
-
-Give a ⭐️ if this project helped you!
-
-***
-_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
+This project is licensed under the [MIT License](LICENSE).

@@ -1,24 +1,27 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tsConfigPaths from 'vite-tsconfig-paths'
-import { EsLinter, linterPlugin } from 'vite-plugin-linter'
-import svgrPlugin from 'vite-plugin-svgr'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
+import tsconfigPaths from "vite-tsconfig-paths";
+import type { UserConfig as VitesUserConfigInterface } from "vitest/config";
 
 // https://vitejs.dev/config/
-export default defineConfig(configEnv => ({
-  plugins: [
-    react(),
-    tsConfigPaths(),
-    linterPlugin({
-      include: ['./src/**/*.{ts,tsx}'],
-      linters: [new EsLinter({ configEnv })],
-    }),
-    svgrPlugin(),
-  ],
+const vitestConfig: VitesUserConfigInterface = {
+  test: {
+    globals: true,
+    environment: "happy-dom",
+    setupFiles: ["src/setupTest.ts"],
+  },
+};
+
+export default defineConfig({
+  plugins: [react(), tsconfigPaths()],
+  test: vitestConfig.test,
   server: {
     port: 3000,
+    host: "0.0.0.0",
   },
-  preview: {
-    port: 8080,
+  resolve: {
+    alias: {
+      src: "/src",
+    },
   },
-}))
+});
