@@ -1,13 +1,11 @@
-import { Footer, Header } from "@features/ui";
-import Router from "pages/router";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Router from 'pages/router';
+import pagesData from 'router/pages';
 
 function App() {
   return (
     <BrowserRouter>
-      <Header />
-      <Router />
-      <Footer />
+      <Router pages={pagesData} />
     </BrowserRouter>
   );
 }

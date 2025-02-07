@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import { routerType } from "../utilities";
-import pagesData from "./pages-data";
+import { RouterType } from "types";
 
-function Router() {
-  const pageRoutes = pagesData.map(({ path, title, element }: routerType) => {
+function Router({ pages }: {pages: RouterType[]}) {
+  const pageRoutes = pages.map(({ path, title, element }: routerType) => {
     return <Route key={title} path={`/${path}`} element={element} />;
   });
 
