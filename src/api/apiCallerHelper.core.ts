@@ -1,4 +1,4 @@
-import { RequestOptions } from "types/api";
+import { APIResponse, RequestOptions } from "types/api";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_DOMAIN || 'http://localhost:8080';
 
@@ -23,16 +23,28 @@ function buildHeaders(options: RequestOptions): HeadersInit {
   };
 }
 
-
-export async function handleResponse(response: Response): Promise<Response> {
+export async function handleResponse<T>(response: Response): Promise<APIResponse<T>> {
+  const contentType = response.headers.get('content-type');
+  const isJson = contentType?.includes('application/json');
+  
   if (!response.ok) {
-    const contentType = response.headers.get('content-type');
-    const isJson = contentType?.includes('application/json');
-    const data = isJson ? await response.json() : await response.text();
-    throw new APIError(response.status, response.statusText, data.error);
+    const errorData = isJson ? await response.json() : { error: await response.text() };
+    throw new APIError(response.status, response.statusText, errorData);
   }
 
-  return response;
+  if (isJson) {
+    const data = await response.json();
+    return {
+      data: data as T,
+      message: 'Success'
+    };
+  }
+  
+  const text = await response.text();
+  return {
+    data: text as unknown as T,
+    message: 'Success'
+  };
 }
 
 export class APIError extends Error {
@@ -46,7 +58,7 @@ export class APIError extends Error {
   }
 }
 
-export async function get(endpoint: string, options: RequestOptions = {}): Promise<Response> {
+export async function get<T>(endpoint: string, options: RequestOptions = {}): Promise<APIResponse<T>> {
   const { params, signal } = options;
   const url = buildUrl(endpoint, params);
   
@@ -56,11 +68,10 @@ export async function get(endpoint: string, options: RequestOptions = {}): Promi
     signal,
   });
 
-  return handleResponse(response);
+  return handleResponse<T>(response);
 }
 
-export async function post(endpoint: string, options: RequestOptions = {}): Promise<Response> {
-  const { body, signal } = options;
+export async function post<T>(endpoint: string, options: RequestOptions = {}): Promise<APIResponse<T>> {  const { body, signal } = options;
   const url = buildUrl(endpoint);
 
   const response = await fetch(url, {
@@ -70,5 +81,5 @@ export async function post(endpoint: string, options: RequestOptions = {}): Prom
     signal,
   });
 
-  return handleResponse(response);
+  return handleResponse<T>(response);
 }

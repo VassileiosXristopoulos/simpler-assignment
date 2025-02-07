@@ -3,7 +3,7 @@ import { DefaultLayout } from 'layouts/DefaultLayout';
 
 export default function Home() {
   const navigate = useNavigate();
-  console.log("Home!!")
+
   return <DefaultLayout cartVisible={true}>
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md w-full">

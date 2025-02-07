@@ -12,8 +12,9 @@ export type APIErrorResponse = {
   error: string;
 }
 
-export type APISuccessResponse = {
-  message: string;
+export type APISuccessResponse<T> = {
+  data: T;
+  message?: string;
 }
 
-export type APIResponse = APIErrorResponse | APISuccessResponse;
+export type APIResponse<T> = APISuccessResponse<T> | APIErrorResponse;
