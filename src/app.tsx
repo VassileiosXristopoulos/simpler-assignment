@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Router from 'pages/router';
+import Router from 'pages/Router';
 import pagesData from 'router/pages';
+
 
 function App() {
   return (
