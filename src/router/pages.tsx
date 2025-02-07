@@ -1,6 +1,8 @@
-import Home from '../pages/Home';
-import Shop from 'pages/Shop';
+import { lazy } from 'react';
 import { RouterType } from 'types';
+
+const Home = lazy(() => import('../pages/Home'));
+const Shop = lazy(() => import('../pages/Shop'));
 
 const pagesData: RouterType[] = [
   {
