@@ -1,5 +1,6 @@
 import React from 'react';
 import { Header } from '../components/Header';
+import { ErrorBoundary } from 'components/ErrorBoundary';
 
 interface DefaultLayoutProps {
   children: React.ReactNode;
@@ -25,8 +26,9 @@ export function DefaultLayout({
         backButtonText={backButtonText}
         backButtonPath={backButtonPath}
       />
-
-      {children}
+      <ErrorBoundary>
+        {children}
+      </ErrorBoundary>
     </div>
   );
 }
