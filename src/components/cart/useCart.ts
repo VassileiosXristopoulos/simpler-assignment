@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { CartContext } from 'contexts/CartContext';
 
 export function useCart() {
@@ -19,16 +19,25 @@ export function useCart() {
     addItem
   } = context;
 
-  // Calculate cart totals
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
-    0
-  );
+  const { totalItems, subtotal } = useMemo(() => {
+    return cartItems.reduce(
+      (acc, item) => {
+        acc.totalItems += item.quantity;
+        acc.subtotal += item.product.price * item.quantity;
+        return acc;
+      },
+      { totalItems: 0, subtotal: 0 }
+    );
+  }, [cartItems]);
 
-  const discount = selectedDiscount ? (cartItems.length > 0 ? 10 : 0) : 0;
-  const total = Math.max(0, subtotal - discount);
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-  
+  const discount = useMemo(() => {
+    return selectedDiscount ? (cartItems.length > 0 ? 10 : 0) : 0;
+  }, [cartItems.length, selectedDiscount]);
+
+  const total = useMemo(() => {
+    return Math.max(0, subtotal - discount);
+  }, [subtotal, discount]);
+
   return {
     cartItems,
     totalItems,
