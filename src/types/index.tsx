@@ -11,3 +11,13 @@ export interface Product {
   stock: number;
 }
 
+export interface CartItem {
+  productId: string;
+  quantity: number;
+  product: Product;
+}
+
+export interface Discount {
+  code: string;
+  amount: number;
+}
