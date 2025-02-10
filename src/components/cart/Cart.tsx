@@ -1,8 +1,7 @@
-import React from 'react';
-import { Trash2 } from 'lucide-react';
 import { formatPrice } from 'utilities/currency';
 import { useCart } from './useCart';
 import { Button } from '../buttons/Button';
+import { CartItem } from './CartItem';
 
 export function Cart() {
   const {
@@ -32,37 +31,14 @@ export function Cart() {
         <>
           <div className="space-y-4">
             {cartItems.map((item) => (
-              <div
+              <CartItem
                 key={item.productId}
-                className="flex items-center justify-between py-2 border-b"
-              >
-                <div className="flex-1">
-                  <h3 className="font-medium">{item.product.name}</h3>
-                  <p className="text-gray-600">
-                    {formatPrice(item.product.price)} each
-                  </p>
-                </div>
-                <div className="flex items-center gap-4">
-                  <input
-                    type="number"
-                    min="1"
-                    max={item.product.stock}
-                    value={item.quantity}
-                    onChange={(e) => handleQuantityChange(item.productId, e.target.value)}
-                    className="w-16 px-2 py-1 border rounded-md"
-                  />
-                  <Button
-                    onClick={() => removeFromCart(item.productId)}
-                    className="text-red-500 hover:text-red-700"
-                    icon={<Trash2 size={18} />}
-                  >
-                    <span className="sr-only">Remove item</span>
-                  </Button>
-                </div>
-              </div>
+                item={item}
+                onQuantityChange={updateCartQuantity}
+                onRemove={removeFromCart}
+              />
             ))}
           </div>
-
           <div className="mt-6">
             <select
               value={selectedDiscount || ''}

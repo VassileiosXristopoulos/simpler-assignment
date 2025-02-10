@@ -10,9 +10,6 @@ import { useCart } from 'components/cart/useCart';
 export default function Shop() {
   const { data: products, isLoading, error } = useFetch<Product[]>(getProducts, []);
   useEffect(() => {
-    console.log(products)
-    console.log(isLoading)
-    console.log(error)
   }, [products])
 
   const { addToCart } = useCart();
