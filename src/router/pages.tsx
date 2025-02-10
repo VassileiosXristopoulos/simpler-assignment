@@ -3,6 +3,7 @@ import { RouterType } from 'types';
 
 const Home = lazy(() => import('../pages/Home'));
 const Shop = lazy(() => import('../pages/Shop'));
+const OrderSuccess = lazy(() => import('../pages/OrderSuccess'));
 
 const pagesData: RouterType[] = [
   {
@@ -15,6 +16,11 @@ const pagesData: RouterType[] = [
     element: <Shop />,
     title: 'Shop',
   },
+  {
+    path: 'order-success',
+    element: <OrderSuccess />,
+    title: 'Order Success',
+  }
 ];
 
 export default pagesData;

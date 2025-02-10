@@ -2,8 +2,10 @@ import { formatPrice } from 'utilities/currency';
 import { useCart } from './useCart';
 import { Button } from '../buttons/Button';
 import { CartItem } from './CartItem';
+import { useNavigate } from 'react-router-dom';
 
 export function Cart() {
+  const navigate = useNavigate();
   const {
     cartItems,
     selectedDiscount,
@@ -13,16 +15,16 @@ export function Cart() {
     updateCartQuantity,
     removeFromCart,
     applyDiscount,
-    clearCart
+    clearCart,
+    setIsOpen
   } = useCart();
 
-  const handleQuantityChange = (productId: string, value: string) => {
-    const quantity = parseInt(value, 10);
-    if (!isNaN(quantity) && quantity > 0) {
-      updateCartQuantity(productId, quantity);
-    }
+  const handleCheckout = () => {
+    clearCart();
+    setIsOpen(false);
+    navigate('/order-success');
   };
-
+  
   return (
     <div className="p-4">
       {cartItems.length === 0 ? (
@@ -65,7 +67,7 @@ export function Cart() {
             </div>
 
             <Button
-              onClick={clearCart}
+              onClick={handleCheckout}
               className="w-full mt-4 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
             >
               Checkout
