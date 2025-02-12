@@ -4,6 +4,7 @@ import { formatPrice } from 'utilities/currency';
 import { useCart } from './useCart';
 import { Button } from '../buttons/Button';
 import { CartItem } from './CartItem';
+import { useProductContext } from 'contexts/ProductContext';
 
 export function Cart() {
   const navigate = useNavigate();
@@ -13,8 +14,11 @@ export function Cart() {
     error,
     updateQuantity,
     removeItem,
+    total, 
+    subtotal,
+    totalItems
   } = useCart();
-
+  
   if (isLoading) {
     return (
       <div className="p-4 text-center">
@@ -32,18 +36,18 @@ export function Cart() {
     );
   }
 
-  if (!cart || cart.items.length === 0) {
+  if (!cart || cart?.items?.length === 0) {
     return (
       <div className="p-4">
         <p className="text-gray-500 text-center">Your cart is empty</p>
       </div>
     );
   }
-
+  
   return (
     <div className="p-4">
       <div className="space-y-4">
-        {cart.items.map((item) => (
+        {cart?.items?.map((item) => (
           <CartItem
             key={item.productId}
             item={item}
@@ -56,15 +60,15 @@ export function Cart() {
       <div className="mt-6">
         <div className="space-y-2 text-right">
           <p className="text-gray-600">
-            Subtotal: {formatPrice(cart.subtotal)}
+            Subtotal: {formatPrice(subtotal)}
           </p>
-          {cart.discount > 0 && (
+          {/* {cart?.discount > 0 && (
             <p className="text-green-600">
-              Discount: -{formatPrice(cart.discount)}
+              Discount: -{formatPrice(discount)}
             </p>
-          )}
+          )} */}
           <p className="text-xl font-semibold">
-            Total: {formatPrice(cart.total)}
+            Total: {formatPrice(total)}
           </p>
         </div>
 

@@ -1,20 +1,65 @@
 import { APIResponse, CreateCartResponse } from "types/api";
 import { get, post, put } from "./apiCallerHelper.core";
-import { Cart, CartItem, Discount } from "types";
+import { Cart, CartAPI, CartItem, Discount } from "types";
 
+// TODO refactor to return directly cart id
 export async function createCart(): Promise<APIResponse<CreateCartResponse>> {
   return post('/carts');
 }
 
+// TODO: refactor to return directly cart object
 export async function getCart(cartId: string): Promise<APIResponse<Cart>> {
-  return await get(`/carts/${cartId}`);
+  const response = await get(`/carts/${cartId}`);
+  
+  console.log(response) 
+  
+  // TODO: export to function and do error checks
+  if ('data' in response && response.data) {
+    const responseData = JSON.parse(response.data as string) as CartAPI;
+    const transformedCart: Cart = {
+      ...responseData,
+      id: responseData.id,
+      items: responseData.items.map((item) => ({
+        productId: item.product_id, // Convert product_id -> productId
+        quantity: item.quantity
+      }))
+    };
+
+    return { ...response, data: transformedCart };
+  }
+
+  return response as APIResponse<Cart>; // If no data, return original response
 }
 
 export async function updateCart(cartId: string, cartItems: CartItem[]): Promise<APIResponse<Cart>> {
-  return put(`/carts/${cartId}`, {
-    body: JSON.stringify(cartItems),
+  // Convert request payload
+  const itemsPayload = cartItems.map((item) => ({
+    product_id: item.productId,
+    quantity: item.quantity
+  }));
+
+  // Perform API request
+  const response = await put(`/carts/${cartId}`, {
+    body: JSON.stringify(itemsPayload),
     contentType: 'application/json'
   });
+
+  // Ensure data exists before transforming
+  if ('data' in response && response.data) {
+    const responseData = response.data as CartAPI;
+    const transformedCart: Cart = {
+      ...responseData,
+      id: responseData.id,
+      items: responseData.items.map((item) => ({
+        productId: item.product_id, // Convert product_id -> productId
+        quantity: item.quantity
+      }))
+    };
+
+    return { ...response, data: transformedCart };
+  }
+
+  return response as APIResponse<Cart>; // If no data, return original response
 }
 
 export async function getDiscounts(): Promise<APIResponse<Discount[]>> {

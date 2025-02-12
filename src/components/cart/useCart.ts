@@ -1,58 +1,17 @@
 import { createCart, getCart, updateCart } from 'api/cartApi';
-import { CartContext } from 'contexts/CartContext';
+import { CartContext, useCartContext } from 'contexts/CartContext';
+import { useProductContext } from 'contexts/ProductContext';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Cart, CartItem, Product } from 'types';
 
 export function useCart() {
-  const [cart, setCart] = useState<Cart | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const context = useContext(CartContext);
-  if (!context) {
-    throw new Error('useCart must be used within a CartProvider');
-  }
-  const {
-    setCartIsOpen,
-    cartIsOpen
-  } = context;
-  
+  const {setCartIsOpen, cartIsOpen, cart, setCart} = useCartContext();
+  const { products } = useProductContext();
 
-  // Get or create cart
-  const initializeCart = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      let cartId = localStorage.getItem(CART_ID_KEY);
-
-      if (!cartId || (+cartId !== +cartId)) {
-        console.log("cart id invalid")
-        const response = await createCart();
-        if ('data' in response) {
-          cartId = response.data.cartId;
-          localStorage.setItem(CART_ID_KEY, cartId);
-        }
-      }
-
-      if (cartId) {
-        const response = await getCart(cartId);
-        
-        if ('data' in response) {
-          setCart(response.data);
-        }
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to initialize cart');
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    initializeCart();
-  }, [initializeCart]);
-
-  const addItem = useCallback(async (product: Product, quantity = 1) => {
+  const addToCart = async (product: Product, quantity = 1) => {
     if (!cart?.id) return;
-
     try {
       let updatedCartItems = [];
       if(cart.items.find((cartItem) => cartItem.productId === product.id)) {
@@ -60,7 +19,7 @@ export function useCart() {
           if(cartItem.productId !== product.id) return cartItem;
           return {
             ...cartItem,
-            quantity: quantity
+            quantity: cartItem.quantity + 1
           }
         })
       } else {
@@ -69,18 +28,24 @@ export function useCart() {
           {
             productId: product.id,
             quantity: quantity,
-            product: product
           }
         ]
       }
+      
+      console.log("updatedCart")
+      console.log(updatedCartItems)
       const response = await updateCart(cart.id, updatedCartItems);
+      console.log("updateCartResponse")
+      console.log(response)
+      
       if ('data' in response) {
+        // TODO: normalize data conversions
         setCart(response.data);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to add item to cart');
     }
-  }, [cart?.id]);
+  }
 
   const updateQuantity = useCallback(async (productId: string, quantity: number) => {
     if (!cart?.id) return;
@@ -90,12 +55,18 @@ export function useCart() {
         if(cartItem.productId !== productId) return cartItem;
         return {
           ...cartItem,
-          quantity: quantity
+          quantity: cartItem.quantity + quantity
         }
       })
       const response = await updateCart(cart.id, updatedCartItems);
       if ('data' in response) {
-        setCart(response.data);
+        setCart({
+          ...response.data,
+          items: response.data.items.map((item) => ({
+            productId: item.product_id,
+            quantity: item.quantity
+          }))
+        });
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update quantity');
@@ -129,17 +100,19 @@ export function useCart() {
     //   return false;
     // }
   }, [cart?.id]);
-  
   const { totalItems, subtotal } = useMemo(() => {
     return (cart?.items ?? []).reduce(
       (acc, item) => {
+        const product = products[item.productId];
+        if(!product) return acc;
+        const price = product.price;
         acc.totalItems += item.quantity;
-        acc.subtotal += item.product.price * item.quantity;
+        acc.subtotal += price * item.quantity;
         return acc;
       },
       { totalItems: 0, subtotal: 0 }
     );
-  }, [cart?.items]);
+  }, [cart?.items, products]);
   
   const discount = 0;
   const total = useMemo(() => {
@@ -151,13 +124,14 @@ export function useCart() {
     cart,
     isLoading,
     error,
-    addItem,
+    addToCart,
     updateQuantity,
     removeItem,
     checkout,
-    refreshCart: initializeCart,
     cartIsOpen,
     setCartIsOpen,
-    total
+    total,
+    subtotal,
+    totalItems
   };
 }

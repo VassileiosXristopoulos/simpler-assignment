@@ -12,8 +12,9 @@ export default function Shop() {
   useEffect(() => {
   }, [products])
 
-  const { addToCart } = useCart();
-
+  const {cart, addToCart } = useCart();
+console.log("cart")
+console.log(cart)
   if (isLoading) {
     return <LoadingSpinner />;
   }

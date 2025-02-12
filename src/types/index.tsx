@@ -14,12 +14,25 @@ export interface Product {
 export interface CartItem {
   productId: string;
   quantity: number;
-  product: Product;
+}
+
+export interface CartItemAPI {
+  product_id: string;
+  quantity: number;
 }
 
 export interface Cart {
   id: string;
   items: CartItem[];
+  discountCode?: string;
+  subtotal: number;
+  discount: number;
+  total: number;
+}
+
+export interface CartAPI {
+  id: string;
+  items: CartItemAPI[];
   discountCode?: string;
   subtotal: number;
   discount: number;
