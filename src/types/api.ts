@@ -15,6 +15,11 @@ export type APIErrorResponse = {
 export type APISuccessResponse<T> = {
   data: T;
   message?: string;
+  headers?: Headers;
 }
 
 export type APIResponse<T> = APISuccessResponse<T> | APIErrorResponse;
+
+export interface CreateCartResponse {
+  cartId: string;
+}

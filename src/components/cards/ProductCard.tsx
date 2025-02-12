@@ -1,29 +1,32 @@
+import React, { memo, useMemo, useCallback } from 'react';
 import { ShoppingCart } from 'lucide-react';
-import { Product } from '../../types';
-import { Button } from 'components/buttons/Button';
-import { useCart } from 'components/cart/useCart';
-import { useCallback, useMemo } from 'react';
-import React from 'react';
+import { Product, CartItem } from '../../types';
+import { Button } from '../buttons/Button';
 import { formatPrice } from 'utilities/currency';
 
 interface ProductCardProps {
   product: Product;
+  cartItems: CartItem[];
   onAddToCart: (product: Product) => void;
 }
 
-const ProductCard = React.memo(({ product, onAddToCart }: ProductCardProps) => {
-  const { cartItems } = useCart();
-
-  const { isOutOfStock, formattedPrice } = useMemo(() => {
+export const ProductCard = memo(function ProductCard({ 
+  product, 
+  cartItems,
+  onAddToCart 
+}: ProductCardProps) {
+  // Memoize cart-related calculations
+  const { isOutOfStock, availableStock, formattedPrice } = useMemo(() => {
     const cartItem = cartItems.find(item => item.productId === product.id);
     const quantity = cartItem?.quantity || 0;
-    
     return {
       isOutOfStock: quantity >= product.stock,
+      availableStock: product.stock - quantity,
       formattedPrice: formatPrice(product.price)
     };
   }, [cartItems, product.id, product.stock, product.price]);
 
+  // Memoize click handler
   const handleAddToCart = useCallback(() => {
     onAddToCart(product);
   }, [onAddToCart, product]);
@@ -36,8 +39,10 @@ const ProductCard = React.memo(({ product, onAddToCart }: ProductCardProps) => {
           <span className="text-xl font-bold text-blue-600">
             {formattedPrice}
           </span>
-          <p className="text-sm text-gray-500">
-            {product.stock} in stock
+          <p className={`text-sm ${isOutOfStock ? 'text-red-500 font-medium' : 'text-gray-500'}`}>
+            {isOutOfStock 
+              ? 'Maximum quantity in cart' 
+              : `${availableStock} available`}
           </p>
         </div>
         <Button
@@ -53,14 +58,9 @@ const ProductCard = React.memo(({ product, onAddToCart }: ProductCardProps) => {
               : 'bg-blue-600 text-white hover:bg-blue-700 shadow-sm hover:shadow'}
           `}
         >
-          Add to Cart
+          {isOutOfStock ? 'Max Quantity' : 'Add to Cart'}
         </Button>
       </div>
     </div>
   );
 });
-
-// Set display name for easier debugging
-ProductCard.displayName = "ProductCard";
-
-export { ProductCard };

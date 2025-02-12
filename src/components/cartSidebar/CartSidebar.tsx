@@ -8,7 +8,7 @@ interface CartSidebarProps {
 }
 
 export function CartSidebar({ isOpen }: CartSidebarProps) {
-  const { setIsOpen } = useCart();
+  const { setCartIsOpen } = useCart();
 
   return (
     <>
@@ -22,7 +22,7 @@ export function CartSidebar({ isOpen }: CartSidebarProps) {
           <div className="p-4 border-b flex items-center justify-between">
             <h2 className="text-xl font-semibold">Shopping Cart</h2>
             <Button
-              onClick={() => setIsOpen(false)}
+              onClick={() => setCartIsOpen(false)}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               icon={<X size={24} />}
             >
@@ -39,7 +39,7 @@ export function CartSidebar({ isOpen }: CartSidebarProps) {
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-30"
-          onClick={()=> setIsOpen(false)}
+          onClick={()=> setCartIsOpen(false)}
         />
       )}
     </>

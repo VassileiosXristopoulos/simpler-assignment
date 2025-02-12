@@ -4,8 +4,8 @@ import { useEffect } from 'react'
 import { useFetch } from 'hooks/useFetch';
 import { Product } from 'types';
 import { LoadingSpinner } from 'components/LoadingSpinner';
-import { ProductCard } from 'components/cards/ProductCard';
 import { useCart } from 'components/cart/useCart';
+import { ProductList } from 'components/ProductList/ProductList';
 
 export default function Shop() {
   const { data: products, isLoading, error } = useFetch<Product[]>(getProducts, []);
@@ -26,10 +26,11 @@ export default function Shop() {
     <DefaultLayout
       title="Products"
       backButtonPath='/'>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products?.map((product) => {
-          return <ProductCard key={product.id} product={product} onAddToCart={() => { addToCart(product) }} />
-        })}
+      <div className="py-6">
+        {products && <ProductList
+          products={products}
+          onAddToCart={addToCart}
+        />}
       </div>
     </DefaultLayout>
   )

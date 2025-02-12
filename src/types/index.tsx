@@ -17,7 +17,17 @@ export interface CartItem {
   product: Product;
 }
 
+export interface Cart {
+  id: string;
+  items: CartItem[];
+  discountCode?: string;
+  subtotal: number;
+  discount: number;
+  total: number;
+}
+
 export interface Discount {
   code: string;
   amount: number;
+  type: string;
 }

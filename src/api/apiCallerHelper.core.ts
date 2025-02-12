@@ -36,6 +36,7 @@ export async function handleResponse<T>(response: Response): Promise<APIResponse
     const data = await response.json();
     return {
       data: data as T,
+      headers: response.headers,
       message: 'Success'
     };
   }
@@ -43,7 +44,8 @@ export async function handleResponse<T>(response: Response): Promise<APIResponse
   const text = await response.text();
   return {
     data: text as unknown as T,
-    message: 'Success'
+    message: 'Success',
+    headers: response.headers,
   };
 }
 
@@ -76,6 +78,20 @@ export async function post<T>(endpoint: string, options: RequestOptions = {}): P
 
   const response = await fetch(url, {
     method: 'POST',
+    headers: buildHeaders(options),
+    body,
+    signal,
+  });
+
+  return handleResponse<T>(response);
+}
+
+export async function put<T>(endpoint: string, options: RequestOptions = {}): Promise<APIResponse<T>> {
+  const { body, signal } = options;
+  const url = buildUrl(endpoint);
+
+  const response = await fetch(url, {
+    method: 'PUT',
     headers: buildHeaders(options),
     body,
     signal,

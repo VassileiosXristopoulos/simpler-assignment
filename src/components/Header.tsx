@@ -14,8 +14,7 @@ interface HeaderProps {
 
 export function Header({ cartVisible = true, title, backButtonText, backButtonPath }: HeaderProps) {
   const navigate = useNavigate();
-  const { totalItems, isOpen, setIsOpen } = useCart();
-  const { total } = useCart();
+  const { cartIsOpen, setCartIsOpen, total } = useCart();
 
   return (
     <div className="relative z-30">
@@ -38,14 +37,14 @@ export function Header({ cartVisible = true, title, backButtonText, backButtonPa
       {cartVisible && (
         <div className="fixed top-4 right-4">
           <Button
-            onClick={() => setIsOpen(true)}
+            onClick={() => setCartIsOpen(true)}
             className="bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 transition-colors relative flex items-center gap-2"
             icon={<ShoppingCart size={24} />}
           >
             <span className="ml-2 font-medium">
               {formatPrice(total)}
             </span>
-            <span className="sr-only">Open cart ({totalItems} items)</span>
+            <span className="sr-only">Open cart</span>
           </Button>
         </div>
       )}

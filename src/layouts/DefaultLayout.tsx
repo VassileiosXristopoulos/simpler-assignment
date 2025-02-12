@@ -19,7 +19,7 @@ export function DefaultLayout({
   backButtonText,
   backButtonPath
 }: DefaultLayoutProps) {
-  const { isOpen } = useCart();
+  const { cartIsOpen } = useCart();
 
 
   return (
@@ -31,7 +31,7 @@ export function DefaultLayout({
         backButtonPath={backButtonPath}
       />
       
-      {cartVisible && <CartSidebar isOpen={isOpen} />}
+      {cartVisible && <CartSidebar isOpen={cartIsOpen} />}
 
       <ErrorBoundary>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
