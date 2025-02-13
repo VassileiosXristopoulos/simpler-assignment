@@ -4,6 +4,9 @@ import { CartItem, Discount } from 'types';
 import { isValidUUID } from 'utilities/utils';
 const CART_ID_KEY = "cart_id_key";
 
+//**
+// Cart Context is responsible for maintaining the global state for cart, and also for retrieving the cart from the local storage/creating the cart entry if doesn't exist
+//  */
 interface CartState {
   cartIsOpen: boolean;
   cart: Cart | null;

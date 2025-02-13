@@ -91,9 +91,9 @@ export function Cart() {
 
         <Button
           onClick={onCheckout}
-          className="w-full mt-4 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+          className="w-full mt-4 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center justify-center"
         >
-          Proceed to Checkout
+          Checkout
         </Button>
       </div>
     </div>
