@@ -22,18 +22,14 @@ export default function DiscountSelector({ selectedDiscount, discounts, onApplyD
     const appliedDiscount = discounts?.find((dicount) => dicount.code === code)
     if (appliedDiscount) {
       // applyDiscount(code);
-      console.log("found discount")
-      console.log(appliedDiscount)
       onApplyDiscount(appliedDiscount)
       setInputCode('');
       setError('');
     } else {
-      console.log("Invalid discount code")
       setError('Invalid discount code');
     }
   };
-  console.log(inputCode.length)
-  console.log(inputCode.length === 0)
+
   return (
     <div className="space-y-2">
     {selectedDiscount ? (

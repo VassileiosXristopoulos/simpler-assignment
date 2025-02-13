@@ -41,8 +41,6 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       case "UPDATE_CART":
         return { ...state, cart: action.payload };
       case "CLEAR_CART":
-        console.log("clearing cart")
-        localStorage.removeItem(CART_ID_KEY);
         return { ...state, cart: null };
     default:
       return state;
