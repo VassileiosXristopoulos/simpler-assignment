@@ -1,5 +1,4 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { formatPrice } from 'utilities/currency';
 import { useCart } from './useCart';
 import { Button } from '../buttons/Button';
@@ -7,7 +6,6 @@ import { CartItem } from './CartItem';
 import DiscountSelector from 'components/DiscountSelector';
 
 export function Cart() {
-  const navigate = useNavigate();
   const {
     cart,
     // isLoading,
@@ -20,22 +18,17 @@ export function Cart() {
     subtotal,
     selectedDiscount,
     setSelectedDiscount,
-    discountValue
+    discountValue,
+    initializeCart
   } = useCart();
 
 
-
-  // TODO: cart loading
-  // if (isLoading) {
-  //   return (
-  //     <div className="p-4 text-center">
-  //       <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600 mx-auto"></div>
-  //       <p className="mt-2 text-gray-600">Loading cart...</p>
-  //     </div>
-  //   );
-  // }
-
-
+  useEffect(() => {
+    if(!cart?.id) {
+      console.log("Cart useEffect")
+      initializeCart();
+    }
+  },[])
 
   if (error) {
     return (

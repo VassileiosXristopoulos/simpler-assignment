@@ -1,18 +1,51 @@
-import { addOrder, getDiscounts, updateCart } from 'api/cartApi';
+import { addOrder, createCart, getCart, getDiscounts, updateCart } from 'api/cartApi';
 import { useCartContext } from 'contexts/CartContext';
 import { useProductContext } from 'contexts/ProductContext';
 import { useFetch } from 'hooks/useFetch';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartItem, Discount, Product } from 'types';
+import { CART_ID_KEY } from 'utilities/constants';
+import { isValidUUID } from 'utilities/utils';
 
 export function useCart() {
   const [error, setError] = useState<string | null>(null);
-  const {cart, setCart, resetCart, setCartIsOpen, clearCart} = useCartContext();
+  const {cart, setCart, setCartIsOpen, clearCart} = useCartContext();
   const { products } = useProductContext();
   const [selectedDiscount, setSelectedDiscount] = useState<Discount | null>(null)
   const { data: discounts } = useFetch<Discount[]>(getDiscounts, []);
   const navigate  = useNavigate();
+
+  const initializeCart = async () => {
+    try {
+      let cartId = localStorage.getItem(CART_ID_KEY);
+      // TODO: cleanups and error checks
+      console.log("before initializing cart: " + cartId)
+      if (!isValidUUID(cartId)) {
+        console.log("Cart id not found")
+        const response = await createCart();
+        if ('headers' in response) {
+          const locationHeader = response.headers?.get("Location");
+          cartId = locationHeader?.split("/carts/")[1] || null;
+          if(cartId) {
+            console.log("setting new cart id: " + cartId)
+            localStorage.setItem(CART_ID_KEY, cartId);
+          }
+        }
+      }
+      // TODO: if i have new cart i should now request again
+      if (cartId) {
+        const response = await getCart(cartId);
+        if ('headers' in response) {
+          // dispatch({ type: "SET_CART", payload: response.data });
+          setCart(response.data);
+        }
+      }
+    } catch (err) {
+      throw new Error(err instanceof Error ? err.message : 'Failed to initialize cart');
+    }
+  }
+  
   const addToCart = async (product: Product, quantity = 1) => {
     if (!cart?.id) return;
     try {
@@ -81,22 +114,11 @@ export function useCart() {
 
 
   const onCheckout = async () => {
-    // if (!cart?.id) return;
-
-    // try {
-    //   await api.checkout(cart.id);
-    //   localStorage.removeItem(CART_ID_KEY);
-    //   setCart(null);
-    //   return true;
-    // } catch (err) {
-    //   setError(err instanceof Error ? err.message : 'Checkout failed');
-    //   return false;
-    // }
     try {
       // TODO: check valid response
       await addOrder(cart?.id || null, selectedDiscount?.code || "")
       clearCart();
-      resetCart();
+      localStorage.removeItem(CART_ID_KEY)
       setCartIsOpen(false)
       navigate('/order-success')
     } catch(error) {
@@ -160,6 +182,7 @@ export function useCart() {
     discounts,
     selectedDiscount,
     setSelectedDiscount,
-    discountValue
+    discountValue,
+    initializeCart
   };
 }

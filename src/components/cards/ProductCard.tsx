@@ -14,6 +14,7 @@ export const ProductCard = memo(function ProductCard({
   product, 
   onAddToCart 
 }: ProductCardProps) {
+  // TODO: flickering of disabled button on refresh
   const { cart } = useCartContext();
   // Memoize cart-related calculations
   const { isOutOfStock, availableStock, formattedPrice } = useMemo(() => {
