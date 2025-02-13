@@ -2,7 +2,7 @@ import { addOrder, createCart, getCart, getDiscounts, updateCart } from 'api/car
 import { useCartContext } from 'contexts/CartContext';
 import { useProductContext } from 'contexts/ProductContext';
 import { useFetch } from 'hooks/useFetch';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartItem, Discount, Product } from 'types';
 import { CART_ID_KEY } from 'utilities/constants';
@@ -183,6 +183,6 @@ export function useCart() {
     selectedDiscount,
     setSelectedDiscount,
     discountValue,
-    initializeCart
+    initializeCart,
   };
 }
