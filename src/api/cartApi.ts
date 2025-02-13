@@ -64,6 +64,7 @@ export async function getDiscounts(): Promise<APIResponse<Discount[]>> {
   return get(`/discounts`);
 }
 
+// TODO: should not be here
 export async function addOrder(cartId: string | null, discountCode: string): Promise<APIResponse<unknown>> {
   if (!cartId) {
     return Promise.reject(new Error("cartId cannot be null"));
