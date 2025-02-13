@@ -11,8 +11,6 @@ export async function createCart(): Promise<APIResponse<CreateCartResponse>> {
 export async function getCart(cartId: string): Promise<APIResponse<Cart>> {
   const response = await get(`/carts/${cartId}`);
   
-  console.log(response) 
-  
   // TODO: export to function and do error checks
   if ('data' in response && response.data) {
     const responseData = JSON.parse(response.data as string) as CartAPI;

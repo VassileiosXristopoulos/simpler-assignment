@@ -54,10 +54,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   });
 
   const initializeCart = async () => {
-    console.log("initialize called")
     try {
       let cartId = localStorage.getItem(CART_ID_KEY);
-      console.log("stored cart: " + cartId)
       // TODO: cleanups and error checks
       if (!isValidUUID(cartId)) {
         const response = await createCart();
@@ -65,16 +63,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
           const locationHeader = response.headers?.get("Location");
           const cartId = locationHeader?.split("/carts/")[1];
           if(cartId) {
-            console.log("storing key: " + cartId)
             localStorage.setItem(CART_ID_KEY, cartId);
           }
         }
       }
 
       if (cartId) {
-        console.log("cart found!")
         const response = await getCart(cartId);
-        console.log(response)
         if ('headers' in response) {
      
           dispatch({ type: "SET_CART", payload: response.data });

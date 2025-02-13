@@ -32,11 +32,7 @@ export function useCart() {
         ]
       }
       
-      console.log("updatedCart")
-      console.log(updatedCartItems)
       const response = await updateCart(cart.id, updatedCartItems);
-      console.log("updateCartResponse")
-      console.log(response)
       
       if ('data' in response) {
         // TODO: normalize data conversions
@@ -47,7 +43,7 @@ export function useCart() {
     }
   }
 
-  const updateQuantity = useCallback(async (productId: string, quantity: number) => {
+  const updateQuantity = async (productId: string, quantity: number) => {
     if (!cart?.id) return;
 
     try {
@@ -55,25 +51,19 @@ export function useCart() {
         if(cartItem.productId !== productId) return cartItem;
         return {
           ...cartItem,
-          quantity: cartItem.quantity + quantity
+          quantity: quantity
         }
       })
       const response = await updateCart(cart.id, updatedCartItems);
       if ('data' in response) {
-        setCart({
-          ...response.data,
-          items: response.data.items.map((item) => ({
-            productId: item.product_id,
-            quantity: item.quantity
-          }))
-        });
+        setCart(response.data);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update quantity');
     }
-  }, [cart?.id]);
+  }
 
-  const removeItem = useCallback(async (productId: string) => {
+  const removeItem = async (productId: string) => {
     if (!cart?.id) return;
     try {
       const updatedCartItems = cart.items.filter((cartItem: CartItem) => cartItem.productId !== productId);
@@ -84,10 +74,10 @@ export function useCart() {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to remove item');
     }
-  }, [cart?.id]);
+  }
 
 
-  const checkout = useCallback(async () => {
+  const checkout = async () => {
     // if (!cart?.id) return;
 
     // try {
@@ -99,7 +89,7 @@ export function useCart() {
     //   setError(err instanceof Error ? err.message : 'Checkout failed');
     //   return false;
     // }
-  }, [cart?.id]);
+  }
   const { totalItems, subtotal } = useMemo(() => {
     return (cart?.items ?? []).reduce(
       (acc, item) => {

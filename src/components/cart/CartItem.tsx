@@ -14,7 +14,6 @@ interface CartItemProps {
 export function CartItem({ item, onQuantityChange, onRemove }: CartItemProps) {
   const handleQuantityChange = (value: string) => {
     const quantity = parseInt(value, 10);
-    console.log("quantity:"+ quantity)
     if (!isNaN(quantity) && quantity > 0) {
       onQuantityChange(item.productId, quantity);
     }
