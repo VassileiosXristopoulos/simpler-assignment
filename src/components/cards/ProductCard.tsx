@@ -2,7 +2,7 @@ import { memo, useMemo, useCallback } from 'react';
 import { ShoppingCart } from 'lucide-react';
 import { Product } from '../../types';
 import { Button } from '../buttons/Button';
-import { formatPrice } from 'utilities/currency';
+import { formatPrice } from 'utilities/utils';
 import { useCartContext } from 'contexts/CartContext';
 
 interface ProductCardProps {
@@ -11,6 +11,7 @@ interface ProductCardProps {
 }
 
 export const ProductCard = memo(function ProductCard({ 
+// export const ProductCard = memo(function ProductCard({ 
   product, 
   onAddToCart 
 }: ProductCardProps) {

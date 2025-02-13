@@ -8,7 +8,7 @@ const vitestConfig: VitesUserConfigInterface = {
   test: {
     globals: true,
     environment: "happy-dom",
-    setupFiles: ["src/setupTest.ts"],
+    setupFiles: ["src/setupTest.tsx"],
   },
 };
 

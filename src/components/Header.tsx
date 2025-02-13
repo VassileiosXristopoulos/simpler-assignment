@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, X, ArrowLeft } from 'lucide-react';
 import { Button } from './buttons/Button';
 import { useCart } from './cart/useCart';
-import { formatPrice } from 'utilities/currency';
+import { formatPrice } from 'utilities/utils';
 import { useCartContext } from 'contexts/CartContext';
 
 interface HeaderProps {

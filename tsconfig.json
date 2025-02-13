@@ -26,6 +26,6 @@
       "@features/*": ["./features/*"]
     }
   },
-  "include": ["src", "./setupTest.ts"],
+  "include": ["src", "./setupTest.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

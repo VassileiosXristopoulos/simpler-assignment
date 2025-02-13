@@ -1,7 +1,7 @@
 import React from 'react';
 import { Trash2 } from 'lucide-react';
 import { CartItem as CartItemType } from '../../types';
-import { formatPrice } from 'utilities/currency';
+import { formatPrice } from 'utilities/utils';
 import { Button } from '../buttons/Button';
 import { useProductContext } from 'contexts/ProductContext';
 

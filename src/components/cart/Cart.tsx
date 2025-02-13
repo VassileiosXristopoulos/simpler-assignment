@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { formatPrice } from 'utilities/currency';
+import { formatPrice } from 'utilities/utils';
 import { useCart } from './useCart';
 import { Button } from '../buttons/Button';
 import { CartItem } from './CartItem';

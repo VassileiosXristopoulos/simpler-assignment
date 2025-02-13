@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import Router from 'pages/Router';
 import pagesData from 'router/pages';
 import { ErrorBoundary } from 'components/ErrorBoundary';
