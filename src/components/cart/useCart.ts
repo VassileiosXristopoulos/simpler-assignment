@@ -1,17 +1,18 @@
-import { getDiscounts, updateCart } from 'api/cartApi';
+import { addOrder, getDiscounts, updateCart } from 'api/cartApi';
 import { useCartContext } from 'contexts/CartContext';
 import { useProductContext } from 'contexts/ProductContext';
 import { useFetch } from 'hooks/useFetch';
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CartItem, Discount, Product } from 'types';
 
 export function useCart() {
   const [error, setError] = useState<string | null>(null);
-  const {cart, setCart} = useCartContext();
+  const {cart, setCart, resetCart, setCartIsOpen, clearCart} = useCartContext();
   const { products } = useProductContext();
   const [selectedDiscount, setSelectedDiscount] = useState<Discount | null>(null)
   const { data: discounts } = useFetch<Discount[]>(getDiscounts, []);
-
+  const navigate  = useNavigate();
   const addToCart = async (product: Product, quantity = 1) => {
     if (!cart?.id) return;
     try {
@@ -79,7 +80,7 @@ export function useCart() {
   }
 
 
-  const checkout = async () => {
+  const onCheckout = async () => {
     // if (!cart?.id) return;
 
     // try {
@@ -91,6 +92,17 @@ export function useCart() {
     //   setError(err instanceof Error ? err.message : 'Checkout failed');
     //   return false;
     // }
+    try {
+      // TODO: check valid response
+      await addOrder(cart?.id || null, selectedDiscount?.code || "")
+      clearCart();
+      resetCart();
+      setCartIsOpen(false)
+      navigate('/order-success')
+    } catch(error) {
+      console.log(error)
+    }
+    
   }
   const { totalItems, subtotal } = useMemo(() => {
     return (cart?.items ?? []).reduce(
@@ -141,7 +153,7 @@ export function useCart() {
     addToCart,
     updateQuantity,
     removeItem,
-    checkout,
+    onCheckout,
     total,
     subtotal,
     totalItems,

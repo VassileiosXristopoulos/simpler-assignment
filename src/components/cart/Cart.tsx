@@ -11,6 +11,7 @@ export function Cart() {
   const {
     cart,
     // isLoading,
+    onCheckout,
     discounts,
     error,
     updateQuantity,
@@ -88,11 +89,8 @@ export function Cart() {
           </p>
         </div>
 
-
-
-
         <Button
-          onClick={() => navigate('/checkout')}
+          onClick={onCheckout}
           className="w-full mt-4 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
         >
           Proceed to Checkout

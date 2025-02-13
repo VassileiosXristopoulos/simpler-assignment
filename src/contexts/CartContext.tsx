@@ -25,6 +25,7 @@ interface CartContextType extends CartState {
   updateCart: (cart: Cart) => void;
   setCart: (cart: Cart) => void;
   clearCart: () => void;
+  resetCart: () => void;
 }
 
 export const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -40,6 +41,8 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       case "UPDATE_CART":
         return { ...state, cart: action.payload };
       case "CLEAR_CART":
+        console.log("clearing cart")
+        localStorage.removeItem(CART_ID_KEY);
         return { ...state, cart: null };
     default:
       return state;
@@ -60,7 +63,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         const response = await createCart();
         if ('headers' in response) {
           const locationHeader = response.headers?.get("Location");
-          const cartId = locationHeader?.split("/carts/")[1];
+          cartId = locationHeader?.split("/carts/")[1] || null;
           if(cartId) {
             localStorage.setItem(CART_ID_KEY, cartId);
           }
@@ -70,7 +73,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (cartId) {
         const response = await getCart(cartId);
         if ('headers' in response) {
-     
           dispatch({ type: "SET_CART", payload: response.data });
         }
       }
@@ -88,7 +90,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setCartIsOpen: (cartIsOpen: boolean) => dispatch({ type: 'SET_IS_OPEN', payload: cartIsOpen }),
     updateCart: (cart: Cart) => dispatch({type: 'UPDATE_CART', payload: cart}),
     setCart: (cart: Cart) => dispatch({type: 'SET_CART', payload: cart}),
-    clearCart: () => dispatch({type: 'CLEAR_CART'})
+    clearCart: () => dispatch({type: 'CLEAR_CART'}),
+    resetCart: () => {
+      localStorage.removeItem(CART_ID_KEY)
+      initializeCart();
+    }
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
