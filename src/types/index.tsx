@@ -42,5 +42,5 @@ export interface CartAPI {
 export interface Discount {
   code: string;
   amount: number;
-  type: string;
+  type: "FLAT" | "PERCENTAGE" | "BOGO";
 }

@@ -10,7 +10,7 @@ export function Button({ children, styles, icon, className = '', ...props }: But
   return (
     <button 
       style={styles} 
-      className={`inline-flex items-center gap-2 ${className}`}
+      className={`inline-flex items-center gap-2 ${className} disabled:opacity-50 disabled:cursor-not-allowed`}
       {...props}
     >
       {icon && <span className="flex-shrink-0">{icon}</span>}

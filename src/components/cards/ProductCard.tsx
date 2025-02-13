@@ -1,30 +1,30 @@
-import React, { memo, useMemo, useCallback } from 'react';
+import { memo, useMemo, useCallback } from 'react';
 import { ShoppingCart } from 'lucide-react';
-import { Product, CartItem } from '../../types';
+import { Product } from '../../types';
 import { Button } from '../buttons/Button';
 import { formatPrice } from 'utilities/currency';
+import { useCartContext } from 'contexts/CartContext';
 
 interface ProductCardProps {
   product: Product;
-  cartItems: CartItem[];
   onAddToCart: (product: Product) => void;
 }
 
 export const ProductCard = memo(function ProductCard({ 
   product, 
-  cartItems,
   onAddToCart 
 }: ProductCardProps) {
+  const { cart } = useCartContext();
   // Memoize cart-related calculations
   const { isOutOfStock, availableStock, formattedPrice } = useMemo(() => {
-    const cartItem = cartItems.find(item => item.productId === product.id);
+    const cartItem = cart?.items.find(item => item.productId === product.id);
     const quantity = cartItem?.quantity || 0;
     return {
       isOutOfStock: quantity >= product.stock,
       availableStock: product.stock - quantity,
       formattedPrice: formatPrice(product.price)
     };
-  }, [cartItems, product.id, product.stock, product.price]);
+  }, [cart?.items, product.id, product.stock, product.price]);
 
   // Memoize click handler
   const handleAddToCart = useCallback(() => {

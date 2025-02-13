@@ -1,14 +1,14 @@
 import { X } from 'lucide-react';
 import { Button } from '../buttons/Button';
 import { Cart } from 'components/cart/Cart';
-import { useCart } from 'components/cart/useCart';
+import { useCartContext } from 'contexts/CartContext';
 
 interface CartSidebarProps {
   isOpen: boolean;
 }
 
 export function CartSidebar({ isOpen }: CartSidebarProps) {
-  const { setCartIsOpen } = useCart();
+  const { setCartIsOpen } = useCartContext();
 
   return (
     <>

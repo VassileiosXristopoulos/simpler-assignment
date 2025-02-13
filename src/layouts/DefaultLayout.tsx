@@ -3,6 +3,7 @@ import { Header } from '../components/Header';
 import { ErrorBoundary } from 'components/ErrorBoundary';
 import { useCart } from 'components/cart/useCart';
 import { CartSidebar } from 'components/cartSidebar/CartSidebar';
+import { useCartContext } from 'contexts/CartContext';
 
 interface DefaultLayoutProps {
   children: React.ReactNode;
@@ -19,8 +20,7 @@ export function DefaultLayout({
   backButtonText,
   backButtonPath
 }: DefaultLayoutProps) {
-  const { cartIsOpen } = useCart();
-
+  const { cartIsOpen } = useCartContext();
 
   return (
     <div className="min-h-screen bg-gray-100">

@@ -4,6 +4,7 @@ import { ShoppingCart, X, ArrowLeft } from 'lucide-react';
 import { Button } from './buttons/Button';
 import { useCart } from './cart/useCart';
 import { formatPrice } from 'utilities/currency';
+import { useCartContext } from 'contexts/CartContext';
 
 interface HeaderProps {
   cartVisible?: boolean;
@@ -14,8 +15,9 @@ interface HeaderProps {
 
 export function Header({ cartVisible = true, title, backButtonText, backButtonPath }: HeaderProps) {
   const navigate = useNavigate();
-  const { cartIsOpen, setCartIsOpen, total } = useCart();
-
+  const { total } = useCart();
+  const { setCartIsOpen } = useCartContext();
+  
   return (
     <div className="relative z-30">
       <div className="max-w-7xl mx-auto p-6 flex items-center gap-4">

@@ -4,29 +4,37 @@ import { formatPrice } from 'utilities/currency';
 import { useCart } from './useCart';
 import { Button } from '../buttons/Button';
 import { CartItem } from './CartItem';
-import { useProductContext } from 'contexts/ProductContext';
+import DiscountSelector from 'components/DiscountSelector';
 
 export function Cart() {
   const navigate = useNavigate();
   const {
     cart,
-    isLoading,
+    // isLoading,
+    discounts,
     error,
     updateQuantity,
     removeItem,
-    total, 
+    total,
     subtotal,
-    totalItems
+    selectedDiscount,
+    setSelectedDiscount,
+    discountValue
   } = useCart();
-  
-  if (isLoading) {
-    return (
-      <div className="p-4 text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600 mx-auto"></div>
-        <p className="mt-2 text-gray-600">Loading cart...</p>
-      </div>
-    );
-  }
+
+
+
+  // TODO: cart loading
+  // if (isLoading) {
+  //   return (
+  //     <div className="p-4 text-center">
+  //       <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600 mx-auto"></div>
+  //       <p className="mt-2 text-gray-600">Loading cart...</p>
+  //     </div>
+  //   );
+  // }
+
+
 
   if (error) {
     return (
@@ -43,7 +51,7 @@ export function Cart() {
       </div>
     );
   }
-  
+
   return (
     <div className="p-4">
       <div className="space-y-4">
@@ -57,20 +65,31 @@ export function Cart() {
         ))}
       </div>
 
+      <div className="mt-6 border-t pt-4">
+        <DiscountSelector
+          selectedDiscount={selectedDiscount}
+          discounts={discounts}
+          onApplyDiscount={(discount) => setSelectedDiscount(discount)}
+          onRemoveDiscount={() => setSelectedDiscount(null)} />
+      </div>
+
       <div className="mt-6">
         <div className="space-y-2 text-right">
           <p className="text-gray-600">
             Subtotal: {formatPrice(subtotal)}
           </p>
-          {/* {cart?.discount > 0 && (
+          {selectedDiscount && (
             <p className="text-green-600">
-              Discount: -{formatPrice(discount)}
+              Discount: -{formatPrice(discountValue)}
             </p>
-          )} */}
+          )}
           <p className="text-xl font-semibold">
-            Total: {formatPrice(total)}
+            Total: {formatPrice(Math.max(0, total - discountValue))}
           </p>
         </div>
+
+
+
 
         <Button
           onClick={() => navigate('/checkout')}

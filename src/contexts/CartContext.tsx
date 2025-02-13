@@ -1,7 +1,6 @@
 import { createCart, getCart, updateCart } from 'api/cartApi';
-import { useCart } from 'components/cart/useCart';
 import { createContext, useReducer, ReactNode, useEffect, useContext } from 'react';
-import { CartItem } from 'types';
+import { CartItem, Discount } from 'types';
 import { isValidUUID } from 'utilities/utils';
 const CART_ID_KEY = "cart_id_key";
 
@@ -50,7 +49,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 export function CartProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, {
     cartIsOpen: false,
-    cart: null
+    cart: null,
   });
 
   const initializeCart = async () => {

@@ -1,14 +1,16 @@
-import { createCart, getCart, updateCart } from 'api/cartApi';
-import { CartContext, useCartContext } from 'contexts/CartContext';
+import { getDiscounts, updateCart } from 'api/cartApi';
+import { useCartContext } from 'contexts/CartContext';
 import { useProductContext } from 'contexts/ProductContext';
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { Cart, CartItem, Product } from 'types';
+import { useFetch } from 'hooks/useFetch';
+import { useMemo, useState } from 'react';
+import { CartItem, Discount, Product } from 'types';
 
 export function useCart() {
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const {setCartIsOpen, cartIsOpen, cart, setCart} = useCartContext();
+  const {cart, setCart} = useCartContext();
   const { products } = useProductContext();
+  const [selectedDiscount, setSelectedDiscount] = useState<Discount | null>(null)
+  const { data: discounts } = useFetch<Discount[]>(getDiscounts, []);
 
   const addToCart = async (product: Product, quantity = 1) => {
     if (!cart?.id) return;
@@ -110,18 +112,42 @@ export function useCart() {
   }, [subtotal, discount]);
   
 
+  // TODO: check discount calculations
+  const discountValue = useMemo(() => {
+    if(!selectedDiscount) return 0;
+    
+    switch (selectedDiscount.type) {
+      case "FLAT":
+        return selectedDiscount.amount;
+  
+      case "PERCENTAGE":
+        return (selectedDiscount.amount / 100) * total;
+  
+      case "BOGO":
+        // Buy One Get One Free: Assume every second item is free
+        if (totalItems === 0) return 0;
+        const freeItems = Math.floor(totalItems / 2);
+        const discountPerItem = total / totalItems;
+        return freeItems * discountPerItem;
+  
+      default:
+        return 0;
+    }
+  }, [selectedDiscount, total, totalItems])
+
   return {
     cart,
-    isLoading,
     error,
     addToCart,
     updateQuantity,
     removeItem,
     checkout,
-    cartIsOpen,
-    setCartIsOpen,
     total,
     subtotal,
-    totalItems
+    totalItems,
+    discounts,
+    selectedDiscount,
+    setSelectedDiscount,
+    discountValue
   };
 }
