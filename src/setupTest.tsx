@@ -18,6 +18,8 @@ const customRender = (ui: React.ReactElement) =>
       </CartProvider>
     </ProductProvider>
   );
+declare global {
+  var render: typeof customRender;
+}
 
-// Override the default render method used in tests
 global.render = customRender;
