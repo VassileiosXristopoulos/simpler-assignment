@@ -77,6 +77,8 @@ export function useCart() {
       const response = await updateCart(cart.id, updatedCartItems);
       
       if ('data' in response) {
+        console.log(response.data)
+        
         // TODO: normalize data conversions
         setCart(response.data);
       }
@@ -114,6 +116,7 @@ export function useCart() {
         setCart(response.data);
       }
     } catch (err) {
+      setCartError(String(err));
       setCartError(err instanceof Error ? err.message : 'Failed to remove item');
     }
   }

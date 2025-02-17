@@ -22,7 +22,6 @@ export default function CartButton({ onClick, className, icon }: CartButtonProps
     }
   }
 
-  console.log("carterror: " + cartError)
   return (
     <Button
       onClick={handleClick}
