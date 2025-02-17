@@ -1,25 +1,42 @@
 import "@testing-library/jest-dom";
 import { ProductProvider } from 'contexts/ProductContext';
-import { CartProvider } from "contexts/CartContext";
+import { CartContextType, CartContext } from "contexts/CartContext";
 import { BrowserRouter } from 'react-router-dom';
-import { render } from '@testing-library/react';
-/**
- * 
- * 1. Test Button component, icon is rendered, text is rendered, onclick is called, is disabled when should be disabled
- * 2. Test price formatting that is happening correctly
- * 3. Functional test the card component, case with out of stock, case with stock, case with no data in product or invalid data
- */
+import { render, renderHook } from '@testing-library/react';
 
-const customRender = (ui: React.ReactElement) =>
-  render(
-    <ProductProvider>
-      <CartProvider>
-        <BrowserRouter>{ui}</BrowserRouter>
-      </CartProvider>
-    </ProductProvider>
-  );
+/**
+ * Shared wrapper for both components and hooks
+ */
+const AllProviders = ({ children, cartProviderInitialValue }: { children: React.ReactNode, cartProviderInitialValue?: CartContextType }) => (
+  <ProductProvider>
+    <CartContext.Provider value={cartProviderInitialValue}>
+      <BrowserRouter>{children}</BrowserRouter>
+    </CartContext.Provider>
+  </ProductProvider>
+);
+
+/**
+ * Custom render function for components
+ */
+const customRender = (ui: React.ReactElement) => render(ui, { wrapper: AllProviders });
+
+/**
+ * Custom render function for hooks
+ */
+const customRenderHook = <T,>(
+  hook: () => T,
+  cartProviderInitialValue?: CartContextType
+) =>
+  renderHook(hook, {
+    wrapper: ({ children }) => (
+      <AllProviders cartProviderInitialValue={cartProviderInitialValue}>{children}</AllProviders>
+    ),
+  });
+
 declare global {
   var render: typeof customRender;
+  var renderHookWithProviders: typeof customRenderHook;
 }
 
 global.render = customRender;
+global.renderHookWithProviders = customRenderHook;
