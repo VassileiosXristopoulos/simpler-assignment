@@ -43,6 +43,10 @@ export function useCart() {
         }
       }
     } catch (err) {
+      // With docker container backend there is the issue that some id is not found anymore in the db after some time
+      if(String(err).includes("404")) {
+        localStorage.removeItem(CART_ID_KEY);
+      }
       setCartError(String(err));
       throw new Error(err instanceof Error ? err.message : 'Failed to initialize cart');
     }
