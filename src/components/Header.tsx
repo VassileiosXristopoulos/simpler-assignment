@@ -1,10 +1,6 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, X, ArrowLeft } from 'lucide-react';
-import { Button } from './buttons/Button';
-import { useCart } from './cart/useCart';
-import { formatPrice } from 'utilities/utils';
-import { useCartContext } from 'contexts/CartContext';
+import CartButton from './buttons/CartButton';
 
 interface HeaderProps {
   cartVisible?: boolean;
@@ -15,8 +11,6 @@ interface HeaderProps {
 
 export function Header({ cartVisible = true, title, backButtonText, backButtonPath }: HeaderProps) {
   const navigate = useNavigate();
-  const { total } = useCart();
-  const { setCartIsOpen } = useCartContext();
   
   return (
     <div className="relative z-30">
@@ -38,16 +32,9 @@ export function Header({ cartVisible = true, title, backButtonText, backButtonPa
       </div>
       {cartVisible && (
         <div className="fixed top-4 right-4">
-          <Button
-            onClick={() => setCartIsOpen(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 transition-colors relative flex items-center gap-2"
+          <CartButton 
             icon={<ShoppingCart size={24} />}
-          >
-            <span className="ml-2 font-medium">
-              {formatPrice(total)}
-            </span>
-            <span className="sr-only">Open cart</span>
-          </Button>
+           />
         </div>
       )}
     </div>

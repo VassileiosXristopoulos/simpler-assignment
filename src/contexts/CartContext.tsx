@@ -3,6 +3,7 @@ import { CartItem } from 'types';
 
 interface CartState {
   cartIsOpen: boolean;
+  cartError: string;
   cart: Cart | null;
 }
 
@@ -15,12 +16,14 @@ type CartAction =
   | { type: 'SET_IS_OPEN'; payload: boolean }
   | { type: 'SET_CART'; payload: Cart }
   | { type: 'UPDATE_CART'; payload: Cart }
+  | { type: 'SET_CART_ERROR'; payload: string }
   | { type: 'CLEAR_CART' }
 
 interface CartContextType extends CartState {
   setCartIsOpen: (cartIsOpen: boolean) => void;
   updateCart: (cart: Cart) => void;
   setCart: (cart: Cart) => void;
+  setCartError: (error: string) => void;
   clearCart: () => void;
 }
 
@@ -38,6 +41,8 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         return { ...state, cart: action.payload };
       case "CLEAR_CART":
         return { ...state, cart: null };
+      case "SET_CART_ERROR":
+        return { ...state, cartError: action.payload };
     default:
       return state;
   }
@@ -46,6 +51,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 export function CartProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, {
     cartIsOpen: false,
+    cartError: "",
     cart: null,
   });
 
@@ -54,6 +60,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setCartIsOpen: (cartIsOpen: boolean) => dispatch({ type: 'SET_IS_OPEN', payload: cartIsOpen }),
     updateCart: (cart: Cart) => dispatch({type: 'UPDATE_CART', payload: cart}),
     setCart: (cart: Cart) => dispatch({type: 'SET_CART', payload: cart}),
+    setCartError: (error: string) => dispatch({type: 'SET_CART_ERROR', payload: error}),
     clearCart: () => dispatch({type: 'CLEAR_CART'}),
   };
 

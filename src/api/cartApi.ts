@@ -10,7 +10,6 @@ export async function createCart(): Promise<APIResponse<CreateCartResponse>> {
 // TODO: refactor to return directly cart object
 export async function getCart(cartId: string): Promise<APIResponse<Cart>> {
   const response = await get(`/carts/${cartId}`);
-  
   // TODO: export to function and do error checks
   if ('data' in response && response.data) {
     const responseData = JSON.parse(response.data as string) as CartAPI;

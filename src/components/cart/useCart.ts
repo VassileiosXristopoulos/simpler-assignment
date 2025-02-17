@@ -9,8 +9,7 @@ import { CART_ID_KEY } from 'utilities/constants';
 import { isValidUUID } from 'utilities/utils';
 
 export function useCart() {
-  const [error, setError] = useState<string | null>(null);
-  const {cart, setCart, setCartIsOpen, clearCart} = useCartContext();
+  const {cart, setCart, setCartIsOpen, clearCart, setCartError, cartError} = useCartContext();
   const { products } = useProductContext();
   const [selectedDiscount, setSelectedDiscount] = useState<Discount | null>(null)
   const { data: discounts } = useFetch<Discount[]>(getDiscounts, []);
@@ -36,12 +35,15 @@ export function useCart() {
       // TODO: if i have new cart i should now request again
       if (cartId) {
         const response = await getCart(cartId);
-        if ('headers' in response) {
+        const dataInResponse = 'data' in response;
+        console.log("data in response: " + dataInResponse)
+        if ('data' in response) {
           // dispatch({ type: "SET_CART", payload: response.data });
           setCart(response.data);
         }
       }
     } catch (err) {
+      setCartError(String(err));
       throw new Error(err instanceof Error ? err.message : 'Failed to initialize cart');
     }
   }
@@ -75,7 +77,7 @@ export function useCart() {
         setCart(response.data);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to add item to cart');
+      setCartError(err instanceof Error ? err.message : 'Failed to add item to cart');
     }
   }
 
@@ -95,7 +97,7 @@ export function useCart() {
         setCart(response.data);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update quantity');
+      setCartError(err instanceof Error ? err.message : 'Failed to update quantity');
     }
   }
 
@@ -108,7 +110,7 @@ export function useCart() {
         setCart(response.data);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to remove item');
+      setCartError(err instanceof Error ? err.message : 'Failed to remove item');
     }
   }
 
@@ -171,7 +173,6 @@ export function useCart() {
 
   return {
     cart,
-    error,
     addToCart,
     updateQuantity,
     removeItem,
@@ -184,5 +185,6 @@ export function useCart() {
     setSelectedDiscount,
     discountValue,
     initializeCart,
+    cartError
   };
 }

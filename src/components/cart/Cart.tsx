@@ -8,10 +8,9 @@ import DiscountSelector from 'components/DiscountSelector';
 export function Cart() {
   const {
     cart,
-    // isLoading,
+    cartError,
     onCheckout,
     discounts,
-    error,
     updateQuantity,
     removeItem,
     total,
@@ -25,15 +24,15 @@ export function Cart() {
 
   useEffect(() => {
     if(!cart?.id) {
-      console.log("Cart useEffect")
       initializeCart();
     }
   },[])
+  // TODO: icon on cart button for error
 
-  if (error) {
+  if (cartError) {
     return (
       <div className="p-4 text-center">
-        <p className="text-red-600">{error}</p>
+        <p className="text-red-600">{cartError}</p>
       </div>
     );
   }

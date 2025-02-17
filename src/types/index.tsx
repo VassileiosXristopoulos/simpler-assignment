@@ -24,10 +24,6 @@ export interface CartItemAPI {
 export interface Cart {
   id: string;
   items: CartItem[];
-  discountCode?: string;
-  subtotal: number;
-  discount: number;
-  total: number;
 }
 
 export interface CartAPI {
