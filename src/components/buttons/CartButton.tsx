@@ -1,19 +1,23 @@
 import { Button } from './Button'
-import { formatPrice } from 'utilities/utils';
+import { formatPrice, getDiscountValue } from 'utilities/utils';
 import { useCart } from 'components/cart/useCart';
 import { useCartContext } from 'contexts/CartContext';
+import { useMemo } from 'react';
+
 type CartButtonProps = {
   onClick?: () => void,
   className?: string;
   icon?: JSX.Element;
 }
 export default function CartButton({ onClick, className, icon }: CartButtonProps) {
-  const { total } = useCart();
-  const { setCartIsOpen, cartError } = useCartContext();
-
+  const { subtotal } = useCart();
+  const { setCartIsOpen, cartError, selectedDiscount } = useCartContext();
+  const discountValue = useMemo(() => getDiscountValue({ selectedDiscount, total: subtotal }),
+    [selectedDiscount, subtotal]);
+    
   /**
-   * Cart button has default behaviour for click action, that can be overriden
-   */
+ * Cart button has default behaviour for click action, that can be overriden
+ */
   const handleClick = () => {
     if (onClick) {
       onClick();
@@ -34,7 +38,7 @@ export default function CartButton({ onClick, className, icon }: CartButtonProps
         </div>
       )}
       <span className="ml-2 font-medium">
-        {formatPrice(total)}
+        {formatPrice(Math.max(0, subtotal - discountValue))}
       </span>
       <span className="sr-only">Open cart</span>
     </Button>

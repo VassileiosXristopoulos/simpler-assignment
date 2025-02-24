@@ -1,32 +1,29 @@
-import { useEffect } from 'react';
-import { formatPrice } from 'utilities/utils';
+import { useEffect, useMemo } from 'react';
+import { formatPrice, getDiscountValue } from 'utilities/utils';
 import { useCart } from './useCart';
 import { Button } from '../buttons/Button';
 import { CartItem } from './CartItem';
 import DiscountSelector from 'components/DiscountSelector';
+import { useCartContext } from 'contexts/CartContext';
 
 export function Cart() {
   const {
-    cart,
-    cartError,
     onCheckout,
-    discounts,
     updateQuantity,
     removeItem,
-    total,
     subtotal,
-    selectedDiscount,
-    setSelectedDiscount,
-    discountValue,
     initializeCart
   } = useCart();
 
-
+  const { cart, cartError, selectedDiscount, setSelectedDiscount, clearDiscount } = useCartContext();
+  const discountValue = useMemo(() => getDiscountValue({ selectedDiscount, total: subtotal }),
+    [selectedDiscount, subtotal]);
+    
   useEffect(() => {
-    if(!cart?.id) {
+    if (!cart?.id) {
       initializeCart();
     }
-  },[])
+  }, [])
   // TODO: icon on cart button for error
 
   if (cartError) {
@@ -61,9 +58,8 @@ export function Cart() {
       <div className="mt-6 border-t pt-4">
         <DiscountSelector
           selectedDiscount={selectedDiscount}
-          discounts={discounts}
           onApplyDiscount={(discount) => setSelectedDiscount(discount)}
-          onRemoveDiscount={() => setSelectedDiscount(null)} />
+          onRemoveDiscount={clearDiscount} />
       </div>
 
       <div className="mt-6">
@@ -77,7 +73,7 @@ export function Cart() {
             </p>
           )}
           <p className="text-xl font-semibold">
-            Total: {formatPrice(Math.max(0, total - discountValue))}
+            Total: {formatPrice(Math.max(0, subtotal - discountValue))}
           </p>
         </div>
 

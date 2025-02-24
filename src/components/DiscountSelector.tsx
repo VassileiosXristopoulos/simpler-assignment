@@ -2,21 +2,23 @@ import React, { useState } from 'react'
 import { Tag } from 'lucide-react';
 import { Button } from './buttons/Button';
 import { Discount } from 'types';
+import { useFetch } from 'hooks/useFetch';
+import { getDiscounts } from 'api/cartApi';
 
 type DiscountSelectorProps = {
   selectedDiscount: Discount | null;
-  discounts: Discount[] | null;
   onApplyDiscount: (discount: Discount) => void;
   onRemoveDiscount: () => void;
 }
-export default function DiscountSelector({ selectedDiscount, discounts, onApplyDiscount, onRemoveDiscount }: DiscountSelectorProps) {
+export default function DiscountSelector({ selectedDiscount, onApplyDiscount, onRemoveDiscount }: DiscountSelectorProps) {
+  const { data: discounts } = useFetch<Discount[]>(getDiscounts, []);
   const [error, setError] = useState('');
   const [inputCode, setInputCode] = React.useState('');
 
   const handleApplyDiscount = () => {
     const code = inputCode.trim().toUpperCase();
     if (!code) {
-      // setError('Please enter a discount code');
+      setError('Please enter a discount code');
       return;
     }
     const appliedDiscount = discounts?.find((dicount) => dicount.code === code)
