@@ -34,16 +34,17 @@ const mockProduct: Product = {
 // Mock Cart Context Provider
 const mockCart: Cart = {
   id: "cart123",
-  items: [],
+  items: null,
 };
-
+// TODO: check again all tests
+// TODO: implement more tests
 
 describe("useCart - addToCart", () => {
 
   it("should add a product to an empty cart", async () => {
     const mockEmptyCart: Cart = {
       id: "cart123",
-      items: [],
+      items: null,
     };
     (updateCart as jest.Mock).mockResolvedValue({
       data: {
@@ -55,13 +56,16 @@ describe("useCart - addToCart", () => {
     const mockSetCart = vi.fn();
     const { result } = global.renderHookWithProviders(() => useCart(), {
       cart: mockEmptyCart,
-      setCart: mockSetCart,
-      updateCart: vi.fn(),
+      cartIsOpen: false,
+      cartError: "",
+      selectedDiscount: null,
       setCartIsOpen: vi.fn(),
-      clearCart: vi.fn(),
+      updateCart: vi.fn(),
+      setCart: vi.fn(),
       setCartError: vi.fn(),
-      cartError: '',
-      cartIsOpen: false
+      clearCart: vi.fn(),
+      setSelectedDiscount: vi.fn(),
+      clearDiscount: vi.fn()
     });
 
     await act(async () => {
@@ -76,7 +80,7 @@ describe("useCart - addToCart", () => {
   it("should increase the quantity if the product is already in the cart", async () => {
     const mockCartWithItem: Cart = {
       id: "cart123",
-      items: [{ productId: mockProduct.id, quantity: 1 }],
+      items: {[mockProduct.id]: { productId: mockProduct.id, quantity: 1 }},
     };
 
     // // mocks what the api returns
@@ -90,13 +94,16 @@ describe("useCart - addToCart", () => {
     const mockSetCart = vi.fn();
     const { result } = global.renderHookWithProviders(() => useCart(), {
       cart: mockCartWithItem,
-      setCart: mockSetCart,
-      updateCart: vi.fn(),
+      cartIsOpen: false,
+      cartError: "",
+      selectedDiscount: null,
       setCartIsOpen: vi.fn(),
-      clearCart: vi.fn(),
+      updateCart: vi.fn(),
+      setCart: vi.fn(),
       setCartError: vi.fn(),
-      cartError: '',
-      cartIsOpen: false
+      clearCart: vi.fn(),
+      setSelectedDiscount: vi.fn(),
+      clearDiscount: vi.fn()
     });
 
     await act(async () => {
@@ -114,14 +121,17 @@ describe("useCart - addToCart", () => {
 
     const mockSetCartError = vi.fn();
     const { result } = global.renderHookWithProviders(() => useCart(), {
-      cart: { id: 'cart123', items: [] },
-      setCart: vi.fn(),
-      updateCart: vi.fn(),
+      cart: mockCart,
+      cartIsOpen: false,
+      cartError: "",
+      selectedDiscount: null,
       setCartIsOpen: vi.fn(),
+      updateCart: vi.fn(),
+      setCart: vi.fn(),
+      setCartError: vi.fn(),
       clearCart: vi.fn(),
-      setCartError: mockSetCartError,
-      cartError: '',
-      cartIsOpen: false
+      setSelectedDiscount: vi.fn(),
+      clearDiscount: vi.fn()
     });
 
     await act(async () => {

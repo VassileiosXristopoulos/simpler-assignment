@@ -23,7 +23,7 @@ export interface CartItemAPI {
 
 export interface Cart {
   id: string;
-  items: CartItem[];
+  items: Record<string, CartItem> | null;
 }
 
 export interface CartAPI {

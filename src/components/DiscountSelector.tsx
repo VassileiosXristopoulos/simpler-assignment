@@ -23,7 +23,6 @@ export default function DiscountSelector({ selectedDiscount, onApplyDiscount, on
     }
     const appliedDiscount = discounts?.find((dicount) => dicount.code === code)
     if (appliedDiscount) {
-      // applyDiscount(code);
       onApplyDiscount(appliedDiscount)
       setInputCode('');
       setError('');

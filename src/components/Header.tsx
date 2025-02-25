@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ShoppingCart, X, ArrowLeft } from 'lucide-react';
+import { ShoppingCart, ArrowLeft } from 'lucide-react';
 import CartButton from './buttons/CartButton';
 
 interface HeaderProps {

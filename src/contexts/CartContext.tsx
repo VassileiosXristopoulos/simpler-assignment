@@ -1,16 +1,11 @@
-import { createContext, useReducer, ReactNode, useEffect, useContext } from 'react';
-import { CartItem, Discount } from 'types';
+import { createContext, useReducer, ReactNode, useContext } from 'react';
+import { Cart, Discount } from 'types';
 
 interface CartState {
   cartIsOpen: boolean;
   cartError: string;
   cart: Cart | null;
   selectedDiscount: Discount | null;
-}
-
-interface Cart {
-  id: string;
-  items: Record<string, CartItem>;
 }
 
 type CartAction = 

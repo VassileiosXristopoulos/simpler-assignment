@@ -1,7 +1,6 @@
 import React from 'react';
 import { Header } from '../components/Header';
 import { ErrorBoundary } from 'components/ErrorBoundary';
-import { useCart } from 'components/cart/useCart';
 import { CartSidebar } from 'components/cartSidebar/CartSidebar';
 import { useCartContext } from 'contexts/CartContext';
 
