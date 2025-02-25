@@ -1,62 +1,41 @@
-import { APIResponse, CreateCartResponse } from "types/api";
+import { APIResponse } from "types/api";
 import { get, post, put } from "./apiCallerHelper.core";
-import { Cart, CartAPI, CartItem, Discount } from "types";
+import { CartAPI, CartItem, Discount } from "types";
+import { adaptCartFromApi, adaptCartItemsToApi } from "adapters/cartAdapter";
 
-// TODO refactor to return directly cart id
-export async function createCart(): Promise<APIResponse<CreateCartResponse>> {
-  return post('/carts');
+export async function createCart() {
+  const response = post('/carts');
+  if ('headers' in response) {
+    const responseHeaderss = response.headers as Headers;
+    const locationHeader = responseHeaderss?.get("Location");
+    return locationHeader?.split("/carts/")[1] || null;
+  }
+  return null;
 }
 
-// TODO: refactor to return directly cart object
-export async function getCart(cartId: string): Promise<APIResponse<Cart>> {
+export async function getCart(cartId: string) {
   const response = await get(`/carts/${cartId}`);
-  // TODO: export to function and do error checks
   if ('data' in response && response.data) {
     const responseData = JSON.parse(response.data as string) as CartAPI;
-    const transformedCart: Cart = {
-      ...responseData,
-      id: responseData.id,
-      items: responseData.items.map((item) => ({
-        productId: item.product_id, // Convert product_id -> productId
-        quantity: item.quantity
-      }))
-    };
-
-    return { ...response, data: transformedCart };
+    return adaptCartFromApi(responseData);
   }
 
-  return response as APIResponse<Cart>; // If no data, return original response
+  return null;
 }
 
-export async function updateCart(cartId: string, cartItems: CartItem[]): Promise<APIResponse<Cart>> {
-  // Convert request payload
-  const itemsPayload = cartItems.map((item) => ({
-    product_id: item.productId,
-    quantity: item.quantity
-  }));
-
-  // Perform API request
+export async function updateCart(cartId: string, cartItems: CartItem[]) {
+  const itemsPayload = adaptCartItemsToApi(cartItems);
   const response = await put(`/carts/${cartId}`, {
     body: JSON.stringify(itemsPayload),
     contentType: 'application/json'
   });
 
-  // Ensure data exists before transforming
   if ('data' in response && response.data) {
     const responseData = response.data as CartAPI;
-    const transformedCart: Cart = {
-      ...responseData,
-      id: responseData.id,
-      items: responseData.items.map((item) => ({
-        productId: item.product_id, // Convert product_id -> productId
-        quantity: item.quantity
-      }))
-    };
-
-    return { ...response, data: transformedCart };
+    return adaptCartFromApi(responseData);
   }
 
-  return response as APIResponse<Cart>; // If no data, return original response
+  return null;
 }
 
 export async function getDiscounts(): Promise<APIResponse<Discount[]>> {

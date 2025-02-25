@@ -17,19 +17,16 @@ export function useCart() {
     try {
       let cartId = localStorage.getItem(CART_ID_KEY);
       if (!isValidUUID(cartId)) {
-        const response = await createCart();
-        if ('headers' in response) {
-          const locationHeader = response.headers?.get("Location");
-          cartId = locationHeader?.split("/carts/")[1] || null;
-          if (cartId) {
-            localStorage.setItem(CART_ID_KEY, cartId);
-          }
+        cartId = await createCart();
+        if (cartId) {
+          localStorage.setItem(CART_ID_KEY, cartId);
         }
       }
+      
       if (cartId) {
-        const response = await getCart(cartId);
-        if ('data' in response) {
-          setCart(response.data);
+        const retrievedCart = await getCart(cartId);
+        if (retrievedCart) {
+          setCart(retrievedCart);
         }
       }
     } catch (err) {
@@ -39,7 +36,7 @@ export function useCart() {
       setCartError(String(err));
       throw new Error(err instanceof Error ? err.message : 'Failed to initialize cart');
     }
-  }, [setCart, setCartError]); // Dependencies
+  }, [setCart, setCartError]);
 
   const addToCart = async (product: Product, quantity = 1) => {
     if (!cart?.id) return;
@@ -63,12 +60,9 @@ export function useCart() {
         ]
       }
 
-      const response = await updateCart(cart.id, updatedCartItems);
-
-      if ('data' in response) {
-        console.log(response.data)
-        // TODO: normalize data conversions
-        setCart(response.data);
+      const updatedCart = await updateCart(cart.id, updatedCartItems);
+      if (updatedCart) {
+        setCart(updatedCart);
       }
     } catch (err) {
       setCartError(err instanceof Error ? err.message : 'Failed to add item to cart');
@@ -86,9 +80,9 @@ export function useCart() {
           quantity: quantity
         }
       })
-      const response = await updateCart(cart.id, updatedCartItems);
-      if ('data' in response) {
-        setCart(response.data);
+      const updatedCart = await updateCart(cart.id, updatedCartItems);
+      if (updatedCart) {
+        setCart(updatedCart);
       }
     } catch (err) {
       setCartError(err instanceof Error ? err.message : 'Failed to update quantity');
@@ -99,9 +93,9 @@ export function useCart() {
     if (!cart?.id) return;
     try {
       const updatedCartItems = cart.items.filter((cartItem: CartItem) => cartItem.productId !== productId);
-      const response = await updateCart(cart.id, updatedCartItems);
-      if ('data' in response) {
-        setCart(response.data);
+      const updatedCart = await updateCart(cart.id, updatedCartItems);
+      if (updatedCart) {
+        setCart(updatedCart);
       }
     } catch (err) {
       setCartError(err instanceof Error ? err.message : 'Failed to remove item');
@@ -110,7 +104,6 @@ export function useCart() {
 
   const onCheckout = async () => {
     try {
-      // TODO: check valid response
       await addOrder(cart?.id || null, selectedDiscount?.code || "")
       clearCart();
       localStorage.removeItem(CART_ID_KEY)
@@ -119,8 +112,8 @@ export function useCart() {
     } catch (error) {
       console.log(error)
     }
-
   }
+  
   function calculateCartTotals(cartItems: CartItem[], products: Record<string, Product>) {
     return cartItems.reduce(
       (acc, item) => {
