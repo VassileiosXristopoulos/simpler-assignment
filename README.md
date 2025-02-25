@@ -1,136 +1,123 @@
-# React Vite TypeScript Jest Boilerplate
+# Shopping Cart Application
 
-This is a boilerplate project for kickstarting React applications using Vite, TypeScript, and Jest for testing. It's configured with essential tools and settings to help you quickly start building React apps with modern tooling.
+## Overview
+This is a shopping cart application built with React. The app allows users to browse products, add them to their cart, apply discount codes, and place an order. It communicates with a backend API to fetch product details, manage the cart, and submit orders.
 
 ## Features
+- Fetch and display products from an API.
+- Add products to a shopping cart.
+- Update product quantities in the cart.
+- Apply discount codes.
+- Live update of the total cost.
+- Checkout and place an order.
 
-- **Vite:** A blazing fast build tool that provides near-instantaneous hot module replacement (HMR) and lightning-fast dev server.
-- **React:** A JavaScript library for building user interfaces.
-- **TypeScript:** A superset of JavaScript that adds static typing and other features to the language.
-- **Jest:** A delightful JavaScript testing framework with a focus on simplicity.
-- **Pre-configured Setup:** All necessary configurations are already set up, allowing you to focus on writing code instead of spending time configuring the project.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
-
-## Getting Started
+## Setup Instructions
 
 ### Prerequisites
-
-Make sure you have Node.js and npm installed on your machine.
+Make sure you have the following installed on your system:
+- [Node.js](https://nodejs.org/) (version 16 or later recommended)
+- [Yarn](https://yarnpkg.com/) or npm
+- [Docker](https://www.docker.com/) (for running the API backend)
 
 ### Installation
-
-1. Clone this repository:
-
-   ```bash
-   git clone https://github.com/your-username/react-vite-ts-jest-boilerplate.git
+1. Clone the repository:
+   ```sh
+   git clone <repository_url>
+   cd simpler-assignment
    ```
 
-2. Navigate into the project directory:
-
-   ```bash
-   cd react-vite-ts-jest-boilerplate
-   ```
-
-3. Install dependencies:
-
-   ```bash
+2. Install dependencies:
+   ```sh
+   yarn install
+   # or
    npm install
    ```
 
-### Development
+3. The expected backend URL is `localhost:8080`, but if you use something else, configure the application's environment variables in the following way:
+   ```sh
+   cp .env.template .env
+   ```
+   Update `.env` with the required API URL.
 
-To start the Backend server, run:
+### Running the API Backend
+1. Start the backend API using Docker:
+   ```sh
+   yarn start-backend
+   # or
+   npm run start-backend
+   ```
+   This will start the API on `http://localhost:8080`.
 
-```bash
-npm run start-backend
+2. To stop the backend API:
+   ```sh
+   yarn stop-backend
+   # or
+   npm run stop-backend
+   ```
+
+### Running the Application
+1. Start the development server:
+   ```sh
+   yarn dev
+   # or
+   npm run dev
+   ```
+
+2. Open your browser and go to `http://localhost:5173` (or the port specified in your terminal).
+
+### Running Tests
+Run the available tests with:
+   ```sh
+   yarn test
+   # or
+   npm run test
+   ```
+
+To check test coverage:
+   ```sh
+   yarn coverage
+   # or
+   npm run coverage
+   ```
+
+### Linting
+Ensure your code follows best practices by running:
+   ```sh
+   yarn lint
+   # or
+   npm run lint
+   ```
+
+### Building for Production
+To build the project:
+   ```sh
+   yarn build
+   # or
+   npm run build
+   ```
+
+### Preview Production Build
+To preview the built project:
+   ```sh
+   yarn preview
+   # or
+   npm run preview
+   ```
+
+## Project Structure
 ```
-
-To start the Frontend, run:
-
-```bash
-npm run dev
+├── src/
+│   ├── adapters/        # Adapters for API data conversions
+│   ├── api/             # API service functions
+│   ├── assets/          # Application assets
+│   ├── components/      # Reusable UI components
+│   ├── contexts/        # React context providers
+│   ├── hooks/           # Custom React hooks
+│   ├── layouts/         # Custom layouts
+│   ├── pages/           # Page components
+│   ├── utilities/       # Utility functions
+├── public/              # Static assets
+├── .env.template        # Environment variables template
+├── package.json         # Project dependencies
+├── tailwind.config.js   # Tailwind CSS configuration
 ```
-
-To stop the Backend server, run:
-
-```bash
-npm run stop-backend
-```
-
-This will start the Vite development server. You can now access your React application at `http://localhost:3000`.
-
-### Testing
-
-To run tests, use:
-
-```bash
-npm test
-```
-
-This will run all the test suites using Jest.
-
-### Building
-
-To build your application for production, run:
-
-```bash
-npm run build
-```
-
-This will generate an optimized build of your application in the `dist` directory.
-
-## Folder Structure
-
-```
-react-vite-ts-jest-boilerplate/
-├── src/                 
-│   ├── features/ui/  
-│   │   ├── footer.tsx
-│   │   ├── haeder.tsx    
-│   │   └── idnex.ts
-│   ├── pages/           
-│   │   ├── home.tsx
-│   │   ├── page-data.tsx
-│   │   └── router.tsx
-│   └── App.tsx          
-├── .eslintrc.cjs           
-├── .gitignore           
-├── index.html       
-├── LICENSE         
-├── package.json         
-├── README.md            
-├── tsconfig.json        
-├── tsconfig.node.json        
-└── vite.config.ts       
-```
-
-## Contributing
-
-Contributions are welcome! Feel free to submit pull requests or open issues for any bugs or feature requests.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
