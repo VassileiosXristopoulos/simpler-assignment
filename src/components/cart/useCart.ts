@@ -103,8 +103,8 @@ export function useCart() {
       localStorage.removeItem(CART_ID_KEY)
       setCartIsOpen(false)
       navigate('/order-success')
-    } catch (error) { // TODO: handle new order error
-      console.log(error)
+    } catch (error) {
+      throw new Error("error completing order");
     }
   }
 

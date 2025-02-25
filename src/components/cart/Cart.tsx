@@ -1,10 +1,12 @@
 import { useEffect, useMemo } from 'react';
-import { formatPrice, getDiscountValue } from 'utilities/utils';
+import { getDiscountValue } from 'utilities/utils';
 import { useCart } from './useCart';
 import { Button } from '../buttons/Button';
-import { CartItem } from './CartItem';
 import DiscountSelector from 'components/DiscountSelector';
 import { useCartContext } from 'contexts/CartContext';
+import PriceSummary from './PriceSummary';
+import { useCheckout } from 'hooks/useCheckout';
+import CartItemList from './CartItemsList';
 
 export function Cart() {
   const {
@@ -18,6 +20,8 @@ export function Cart() {
   const { cart, cartError, selectedDiscount, setSelectedDiscount, clearDiscount } = useCartContext();
   const discountValue = useMemo(() => getDiscountValue({ selectedDiscount, total: subtotal }),
     [selectedDiscount, subtotal]);
+  const { isSubmitting: checkoutInProgress, error: checkoutError, handleCheckout } = useCheckout(onCheckout);
+
 
   useEffect(() => {
     if (!cart?.id) {
@@ -43,16 +47,11 @@ export function Cart() {
 
   return (
     <div className="p-4">
-      <div className="space-y-4">
-        {Object.values(cart?.items ?? {}).map((item) => (
-          <CartItem
-            key={item.productId}
-            item={item}
-            onQuantityChange={updateQuantity}
-            onRemove={removeItem}
-          />
-        ))}
-      </div>
+      <CartItemList
+        cartItems={cart.items}
+        updateQuantity={updateQuantity}
+        removeItem={removeItem}
+      />
 
       <div className="mt-6 border-t pt-4">
         <DiscountSelector
@@ -62,26 +61,18 @@ export function Cart() {
       </div>
 
       <div className="mt-6">
-        <div className="space-y-2 text-right">
-          <p className="text-gray-600">
-            Subtotal: {formatPrice(subtotal)}
-          </p>
-          {selectedDiscount && (
-            <p className="text-green-600">
-              Discount: -{formatPrice(discountValue)}
-            </p>
-          )}
-          <p className="text-xl font-semibold">
-            Total: {formatPrice(Math.max(0, subtotal - discountValue))}
-          </p>
-        </div>
+        <PriceSummary subtotal={subtotal} discountValue={discountValue} selectedDiscount={selectedDiscount} />
 
         <Button
-          onClick={onCheckout}
+          onClick={handleCheckout}
+          disabled={checkoutInProgress}
           className="w-full mt-4 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center justify-center"
         >
           Checkout
         </Button>
+        {checkoutError && (
+          <p className="mt-4 text-red-600 text-center">{checkoutError}</p>
+        )}
       </div>
     </div>
   );
