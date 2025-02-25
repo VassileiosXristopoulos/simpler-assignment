@@ -4,13 +4,13 @@ import { CartAPI, CartItem, Discount } from "types";
 import { adaptCartFromApi, adaptCartItemsToApi } from "adapters/cartAdapter";
 
 export async function createCart() {
-  const response = post('/carts');
+  const response = await post('/carts');
   if ('headers' in response) {
     const responseHeaderss = response.headers as Headers;
     const locationHeader = responseHeaderss?.get("Location");
     return locationHeader?.split("/carts/")[1] || null;
   }
-  return null;
+  throw new Error("Error while creating cart");
 }
 
 export async function getCart(cartId: string) {
@@ -20,7 +20,7 @@ export async function getCart(cartId: string) {
     return adaptCartFromApi(responseData);
   }
 
-  return null;
+  throw new Error("Error while fetching cart");
 }
 
 export async function updateCart(cartId: string, cartItems: CartItem[]) {
