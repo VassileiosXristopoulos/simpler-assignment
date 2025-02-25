@@ -108,7 +108,6 @@ export function useCart() {
     }
   }
 
-
   const onCheckout = async () => {
     try {
       // TODO: check valid response
@@ -134,7 +133,7 @@ export function useCart() {
       { totalItems: 0, subtotal: 0 }
     );
   }
- 
+
   return {
     addToCart,
     updateQuantity,
