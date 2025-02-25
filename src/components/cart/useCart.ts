@@ -1,4 +1,5 @@
-import { addOrder, createCart, getCart, updateCart } from 'api/cartApi';
+import { createCart, getCart, updateCart } from 'api/cartApi';
+import { addOrder } from 'api/orderApi';
 import { useCartContext } from 'contexts/CartContext';
 import { useProductContext } from 'contexts/ProductContext';
 import { useCallback, useMemo } from 'react';

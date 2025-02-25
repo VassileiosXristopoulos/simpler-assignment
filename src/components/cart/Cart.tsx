@@ -24,7 +24,6 @@ export function Cart() {
       initializeCart();
     }
   }, [])
-  // TODO: icon on cart button for error
 
   if (cartError) {
     return (
