@@ -1,10 +1,10 @@
-import { memo, useMemo, useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { Product } from '../../types';
-import { formatPrice } from 'utilities/utils';
 import { useCartContext } from 'contexts/CartContext';
 import { ProductInfo } from './ProductInfo';
 import BaseCard from './BaseCard';
 import { AddToCartButton } from 'components/buttons/AddToCardButton';
+import { useCartItemDetails } from 'hooks/useCartItemDetails';
 
 interface ProductCardProps {
   product: Product;
@@ -14,16 +14,7 @@ interface ProductCardProps {
 export const ProductCard = memo(({ product, onAddToCart }: ProductCardProps) => {
   const { cart } = useCartContext();
 
-  // Memoize cart-related calculations
-  const { isOutOfStock, availableStock, formattedPrice } = useMemo(() => {
-    const cartItem = cart?.items[product.id];
-    const quantity = cartItem?.quantity || 0;
-    return {
-      isOutOfStock: quantity >= product.stock,
-      availableStock: product.stock - quantity,
-      formattedPrice: formatPrice(product.price)
-    };
-  }, [cart?.items, product.id, product.stock, product.price]);
+  const { isOutOfStock, availableStock, formattedPrice } = useCartItemDetails(product);
 
   // Memoize click handler
   const handleAddToCart = useCallback(() => {
