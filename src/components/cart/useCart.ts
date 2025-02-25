@@ -12,7 +12,7 @@ export function useCart() {
   const { cart, setCart, setCartIsOpen, clearCart, setCartError, selectedDiscount } = useCartContext();
   const { products } = useProductContext();
   const navigate = useNavigate();
-  const { totalItems, subtotal } = useMemo(() => calculateCartTotals(cart?.items ?? [], products), [cart?.items, products]);
+  const { totalItems, subtotal } = useMemo(() => calculateCartTotals(cart?.items ?? {}, products), [cart?.items, products]);
 
   const initializeCart = useCallback(async () => {
     try {
@@ -23,7 +23,7 @@ export function useCart() {
           localStorage.setItem(CART_ID_KEY, cartId);
         }
       }
-      
+
       if (cartId) {
         const retrievedCart = await getCart(cartId);
         if (retrievedCart) {
@@ -41,25 +41,14 @@ export function useCart() {
 
   const addToCart = async (product: Product, quantity = 1) => {
     if (!cart?.id) return;
+
     try {
-      let updatedCartItems = [];
-      if (cart.items.find((cartItem) => cartItem.productId === product.id)) {
-        updatedCartItems = cart.items.map((cartItem: CartItem) => {
-          if (cartItem.productId !== product.id) return cartItem;
-          return {
-            ...cartItem,
-            quantity: cartItem.quantity + 1
-          }
-        })
-      } else {
-        updatedCartItems = [
-          ...cart.items,
-          {
-            productId: product.id,
-            quantity: quantity,
-          }
-        ]
-      }
+      let updatedCartItems: Record<string, CartItem> = { ...cart.items };
+      
+      // If the item is already in the cart, add to it's quantity, otherwise initialize with the given quantity
+      updatedCartItems[product.id] = updatedCartItems[product.id]
+        ? { ...updatedCartItems[product.id], quantity: updatedCartItems[product.id].quantity + quantity }
+        : { productId: product.id, quantity };
 
       const updatedCart = await updateCart(cart.id, updatedCartItems);
       if (updatedCart) {
@@ -68,19 +57,18 @@ export function useCart() {
     } catch (err) {
       setCartError(err instanceof Error ? err.message : 'Failed to add item to cart');
     }
-  }
+  };
+
 
   const updateQuantity = async (productId: string, quantity: number) => {
     if (!cart?.id) return;
 
     try {
-      const updatedCartItems = cart.items.map((cartItem: CartItem) => {
-        if (cartItem.productId !== productId) return cartItem;
-        return {
-          ...cartItem,
-          quantity: quantity
-        }
-      })
+      const updatedCartItems: Record<string, CartItem> = { ...cart.items };
+      if (updatedCartItems[productId]) { // If the item exists, update the quantity
+        updatedCartItems[productId].quantity = quantity;
+      }
+
       const updatedCart = await updateCart(cart.id, updatedCartItems);
       if (updatedCart) {
         setCart(updatedCart);
@@ -88,12 +76,17 @@ export function useCart() {
     } catch (err) {
       setCartError(err instanceof Error ? err.message : 'Failed to update quantity');
     }
-  }
+  };
 
   const removeItem = async (productId: string) => {
     if (!cart?.id) return;
+
     try {
-      const updatedCartItems = cart.items.filter((cartItem: CartItem) => cartItem.productId !== productId);
+      const updatedCartItems: Record<string, CartItem> = { ...cart.items };
+
+      // Remove the item by deleting the corresponding property
+      delete updatedCartItems[productId];
+
       const updatedCart = await updateCart(cart.id, updatedCartItems);
       if (updatedCart) {
         setCart(updatedCart);
@@ -101,7 +94,7 @@ export function useCart() {
     } catch (err) {
       setCartError(err instanceof Error ? err.message : 'Failed to remove item');
     }
-  }
+  };
 
   const onCheckout = async () => {
     try {
@@ -110,16 +103,17 @@ export function useCart() {
       localStorage.removeItem(CART_ID_KEY)
       setCartIsOpen(false)
       navigate('/order-success')
-    } catch (error) {
+    } catch (error) { // TODO: handle new order error
       console.log(error)
     }
   }
-  
-  function calculateCartTotals(cartItems: CartItem[], products: Record<string, Product>) {
-    return cartItems.reduce(
+
+  function calculateCartTotals(cartItems: Record<string, CartItem>, products: Record<string, Product>) {
+    return Object.values(cartItems).reduce(
       (acc, item) => {
         const product = products[item.productId];
-        if (!product) return acc;
+        if (!product) return acc; // Skip if product doesn't exist
+
         acc.totalItems += item.quantity;
         acc.subtotal += product.price * item.quantity;
         return acc;

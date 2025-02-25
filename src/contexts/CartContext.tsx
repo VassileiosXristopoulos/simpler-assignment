@@ -10,7 +10,7 @@ interface CartState {
 
 interface Cart {
   id: string;
-  items: CartItem[];
+  items: Record<string, CartItem>;
 }
 
 type CartAction = 

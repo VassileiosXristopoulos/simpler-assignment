@@ -18,7 +18,7 @@ export function Cart() {
   const { cart, cartError, selectedDiscount, setSelectedDiscount, clearDiscount } = useCartContext();
   const discountValue = useMemo(() => getDiscountValue({ selectedDiscount, total: subtotal }),
     [selectedDiscount, subtotal]);
-    
+
   useEffect(() => {
     if (!cart?.id) {
       initializeCart();
@@ -33,7 +33,7 @@ export function Cart() {
     );
   }
 
-  if (!cart || cart?.items?.length === 0) {
+  if (!cart || Object.keys(cart.items ?? {}).length === 0) {
     return (
       <div className="p-4">
         <p className="text-gray-500 text-center">Your cart is empty</p>
@@ -44,7 +44,7 @@ export function Cart() {
   return (
     <div className="p-4">
       <div className="space-y-4">
-        {cart?.items?.map((item) => (
+        {Object.values(cart?.items ?? {}).map((item) => (
           <CartItem
             key={item.productId}
             item={item}

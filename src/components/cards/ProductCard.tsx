@@ -16,8 +16,7 @@ export const ProductCard = memo(({ product, onAddToCart }: ProductCardProps) => 
 
   // Memoize cart-related calculations
   const { isOutOfStock, availableStock, formattedPrice } = useMemo(() => {
-    // TODO: optionally make cart items object with id keys
-    const cartItem = cart?.items.find(item => item.productId === product.id);
+    const cartItem = cart?.items[product.id];
     const quantity = cartItem?.quantity || 0;
     return {
       isOutOfStock: quantity >= product.stock,

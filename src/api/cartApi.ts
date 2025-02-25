@@ -23,7 +23,7 @@ export async function getCart(cartId: string) {
   throw new Error("Error while fetching cart");
 }
 
-export async function updateCart(cartId: string, cartItems: CartItem[]) {
+export async function updateCart(cartId: string, cartItems: Record<string, CartItem>) {
   const itemsPayload = adaptCartItemsToApi(cartItems);
   const response = await put(`/carts/${cartId}`, {
     body: JSON.stringify(itemsPayload),
