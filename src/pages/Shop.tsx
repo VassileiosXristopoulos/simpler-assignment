@@ -1,25 +1,29 @@
 import { DefaultLayout } from 'layouts/DefaultLayout'
 import { getProducts } from 'api/productsApi'
-import { useEffect } from 'react'
-import { useFetch } from 'hooks/useFetch';
-import { Product } from 'types';
-import { LoadingSpinner } from 'components/LoadingSpinner';
+import { useEffect, useState } from 'react'
 import { useCart } from 'components/cart/useCart';
 import { ProductList } from 'components/ProductList/ProductList';
+import { useProductContext } from 'contexts/ProductContext';
 
 export default function Shop() {
-  const { data: products, isLoading, error } = useFetch<Product[]>(getProducts, []);
-  useEffect(() => {
-  }, [products])
-
+  const { products, setProducts } = useProductContext()
   const { addToCart } = useCart();
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
+  const [error, setError] = useState<string | null>(null);
 
-  if (error) {
-    throw new Error(error); // todo: test & fix
-  }
+  const fetchProducts = async () => {
+    try {
+      const retrievedProducts = await getProducts();
+      if (retrievedProducts) {
+        setProducts(retrievedProducts)
+      }
+    } catch (error) {
+      setError("Error while fetching products");
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   return (
     <DefaultLayout
@@ -30,6 +34,10 @@ export default function Shop() {
           products={products}
           onAddToCart={addToCart}
         />}
+        {error &&
+          <div className="bg-red-500 text-white p-4 rounded-md mb-4">
+            {error}
+          </div>}
       </div>
     </DefaultLayout>
   )
