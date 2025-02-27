@@ -7,7 +7,6 @@ export type RequestOptions = {
   contentType?: string;
 };
 
-
 export type APIErrorResponse = {
   error: string;
 }

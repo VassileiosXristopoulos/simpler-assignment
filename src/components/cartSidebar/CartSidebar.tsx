@@ -12,11 +12,9 @@ export function CartSidebar({ isOpen }: CartSidebarProps) {
 
   return (
     <>
-      {/* Cart Slide-out Panel */}
       <div
-        className={`fixed inset-y-0 right-0 w-full sm:w-96 bg-white shadow-xl transform transition-transform duration-300 ease-in-out z-40 ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`fixed inset-y-0 right-0 w-full sm:w-96 bg-white shadow-xl transform transition-transform duration-300 ease-in-out z-40 ${isOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
       >
         <div className="h-full flex flex-col">
           <div className="p-4 border-b flex items-center justify-between">
@@ -35,11 +33,10 @@ export function CartSidebar({ isOpen }: CartSidebarProps) {
         </div>
       </div>
 
-      {/* Overlay */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-30"
-          onClick={()=> setCartIsOpen(false)}
+          onClick={() => setCartIsOpen(false)}
         />
       )}
     </>

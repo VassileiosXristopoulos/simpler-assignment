@@ -11,15 +11,16 @@ interface CartItemProps {
 }
 
 export function CartItem({ item, onQuantityChange, onRemove }: CartItemProps) {
+  const { products } = useProductContext()
+  const product = products[item.productId];
+
   const handleQuantityChange = (value: string) => {
     const quantity = parseInt(value, 10);
     if (!isNaN(quantity) && quantity > 0) {
       onQuantityChange(item.productId, quantity);
     }
   };
-  const { products } = useProductContext()
-  const product = products[item.productId];
-  
+
   return (
     <div className="flex items-center justify-between py-2 border-b">
       <div className="flex-1">

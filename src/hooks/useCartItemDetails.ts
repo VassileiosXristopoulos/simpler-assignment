@@ -5,7 +5,6 @@ import { Product } from 'types';
 
 export function useCartItemDetails (product: Product) {
   const { cart } = useCartContext();
-
   return useMemo(() => {
     if (!cart?.items) {
       return {
@@ -17,7 +16,6 @@ export function useCartItemDetails (product: Product) {
 
     const cartItem = cart.items[product.id] || null;
     const quantity = cartItem?.quantity ?? 0;
-
     return {
       isOutOfStock: quantity >= product.stock,
       availableStock: Math.max(0, product.stock - quantity),

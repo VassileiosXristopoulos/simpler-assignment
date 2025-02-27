@@ -11,7 +11,7 @@ interface HeaderProps {
 
 export function Header({ cartVisible = true, title, backButtonText, backButtonPath }: HeaderProps) {
   const navigate = useNavigate();
-  
+
   return (
     <div className="relative z-30">
       <div className="max-w-7xl mx-auto p-6 flex items-center gap-4">
@@ -32,9 +32,9 @@ export function Header({ cartVisible = true, title, backButtonText, backButtonPa
       </div>
       {cartVisible && (
         <div className="fixed top-4 right-4">
-          <CartButton 
+          <CartButton
             icon={<ShoppingCart size={24} />}
-           />
+          />
         </div>
       )}
     </div>
