@@ -41,7 +41,7 @@ describe('formatPrice', () => {
     expect(formatPrice(price)).toBe('$100.01');
   });
 
-  it('should round a price down correctly (Banker\'s rounding)', () => {
+  it('should round a price up correctly (Banker\'s rounding)', () => {
     const price = 100.015;
     expect(formatPrice(price)).toBe('$100.02');
   });

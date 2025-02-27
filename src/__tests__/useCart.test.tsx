@@ -47,9 +47,9 @@ describe("useCart - addToCart", () => {
       items: null,
     };
     (updateCart as jest.Mock).mockResolvedValue({
-      data: {
-        ...mockCart,
-        items: [{ productId: mockProduct.id, quantity: 1 }],
+      ...mockCart,
+      items: {
+        [mockProduct.id]: { productId: mockProduct.id, quantity: 1 }
       },
     });
 
@@ -61,7 +61,7 @@ describe("useCart - addToCart", () => {
       selectedDiscount: null,
       setCartIsOpen: vi.fn(),
       updateCart: vi.fn(),
-      setCart: vi.fn(),
+      setCart: mockSetCart,
       setCartError: vi.fn(),
       clearCart: vi.fn(),
       setSelectedDiscount: vi.fn(),
@@ -71,24 +71,22 @@ describe("useCart - addToCart", () => {
     await act(async () => {
       await result.current.addToCart(mockProduct);
     });
-    expect(updateCart).toHaveBeenCalledWith("cart123", [
-      { productId: mockProduct.id, quantity: 1 },
-    ]);
-    expect(mockSetCart).toBeCalledWith({ id: mockEmptyCart.id, items: [{ productId: mockProduct.id, quantity: 1 }] })
+    expect(updateCart).toHaveBeenCalledWith(mockCart.id, {
+      [mockProduct.id]: { productId: mockProduct.id, quantity: 1 },
+    });
+    expect(mockSetCart).toBeCalledWith({ id: mockEmptyCart.id, items: { [mockProduct.id]: { productId: mockProduct.id, quantity: 1 } } })
   });
 
   it("should increase the quantity if the product is already in the cart", async () => {
     const mockCartWithItem: Cart = {
       id: "cart123",
-      items: {[mockProduct.id]: { productId: mockProduct.id, quantity: 1 }},
+      items: { [mockProduct.id]: { productId: mockProduct.id, quantity: 1 } },
     };
 
     // // mocks what the api returns
     (updateCart as jest.Mock).mockResolvedValue({
-      data: {
         ...mockCartWithItem,
-        items: [{ productId: mockProduct.id, quantity: 2 }],
-      },
+        items: { [mockProduct.id]: { productId: mockProduct.id, quantity: 2 } },
     });
 
     const mockSetCart = vi.fn();
@@ -99,7 +97,7 @@ describe("useCart - addToCart", () => {
       selectedDiscount: null,
       setCartIsOpen: vi.fn(),
       updateCart: vi.fn(),
-      setCart: vi.fn(),
+      setCart: mockSetCart,
       setCartError: vi.fn(),
       clearCart: vi.fn(),
       setSelectedDiscount: vi.fn(),
@@ -110,10 +108,10 @@ describe("useCart - addToCart", () => {
       await result.current.addToCart(mockProduct);
     });
 
-    expect(updateCart).toHaveBeenCalledWith("cart123", [
-      { productId: mockProduct.id, quantity: 2 },
-    ]);
-    expect(mockSetCart).toBeCalledWith({ id: mockCartWithItem.id, items: [{ productId: mockProduct.id, quantity: 2 }] })
+    expect(updateCart).toHaveBeenCalledWith(mockCart.id, {
+      [mockProduct.id]: { productId: mockProduct.id, quantity: 2 },
+    });
+    expect(mockSetCart).toBeCalledWith({ id: mockCartWithItem.id, items: { [mockProduct.id]: { productId: mockProduct.id, quantity: 2 } } })
   });
 
   it("should handle API errors gracefully", async () => {
@@ -128,7 +126,7 @@ describe("useCart - addToCart", () => {
       setCartIsOpen: vi.fn(),
       updateCart: vi.fn(),
       setCart: vi.fn(),
-      setCartError: vi.fn(),
+      setCartError: mockSetCartError,
       clearCart: vi.fn(),
       setSelectedDiscount: vi.fn(),
       clearDiscount: vi.fn()
