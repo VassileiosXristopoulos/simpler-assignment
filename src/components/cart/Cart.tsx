@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { getDiscountValue } from 'utilities/utils';
 import { useCart } from './useCart';
 import { Button } from '../buttons/Button';
-import DiscountSelector from 'components/DiscountSelector';
+import DiscountSelector from 'components/DiscountSelector/DiscountSelector';
 import { useCartContext } from 'contexts/CartContext';
 import PriceSummary from './PriceSummary';
 import { useCheckout } from 'hooks/useCheckout';

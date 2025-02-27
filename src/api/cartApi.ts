@@ -1,6 +1,5 @@
-import { APIResponse } from "types/api";
 import { get, post, put } from "./apiCallerHelper.core";
-import { CartAPI, CartItem, Discount } from "types";
+import { CartAPI, CartItem } from "types";
 import { adaptCartFromApi, adaptCartItemsToApi } from "adapters/cartAdapter";
 
 export async function createCart() {
@@ -36,8 +35,4 @@ export async function updateCart(cartId: string, cartItems: Record<string, CartI
   }
 
   return null;
-}
-
-export async function getDiscounts(): Promise<APIResponse<Discount[]>> {
-  return get(`/discounts`);
 }
