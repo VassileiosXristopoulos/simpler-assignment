@@ -6,7 +6,7 @@ import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartItem, Product } from 'types';
 import { CART_ID_KEY } from 'utilities/constants';
-import { isValidUUID } from 'utilities/utils';
+import { calculateCartTotals, isValidUUID } from 'utilities/utils';
 
 export function useCart() {
   const { cart, setCart, setCartIsOpen, clearCart, setCartError, selectedDiscount } = useCartContext();
@@ -35,7 +35,6 @@ export function useCart() {
         localStorage.removeItem(CART_ID_KEY);
       }
       setCartError(String(err));
-      throw new Error(err instanceof Error ? err.message : 'Failed to initialize cart');
     }
   }, [setCart, setCartError]);
 
@@ -64,11 +63,10 @@ export function useCart() {
     if (!cart?.id) return;
 
     try {
-      const updatedCartItems: Record<string, CartItem> = { ...cart.items };
+      const updatedCartItems: Record<string, CartItem> = cart.items || {};
       if (updatedCartItems[productId]) { // If the item exists, update the quantity
         updatedCartItems[productId].quantity = quantity;
       }
-
       const updatedCart = await updateCart(cart.id, updatedCartItems);
       if (updatedCart) {
         setCart(updatedCart);
@@ -108,20 +106,7 @@ export function useCart() {
     }
   }
 
-  function calculateCartTotals(cartItems: Record<string, CartItem>, products: Record<string, Product>) {
-    return Object.values(cartItems).reduce(
-      (acc, item) => {
-        const product = products[item.productId];
-        if (!product) return acc; // Skip if product doesn't exist
-
-        acc.totalItems += item.quantity;
-        acc.subtotal += product.price * item.quantity;
-        return acc;
-      },
-      { totalItems: 0, subtotal: 0 }
-    );
-  }
-
+ 
   return {
     addToCart,
     updateQuantity,
