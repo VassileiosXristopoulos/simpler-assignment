@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { useCartContext } from 'contexts/CartContext';
 import { ProductCard } from 'components/cards/ProductCard';
-import { useCartItemDetails } from 'hooks/useCartItemDetails';
+
 // Mock context to simulate cart state
 vi.mock('contexts/CartContext', () => ({
   useCartContext: vi.fn(),
