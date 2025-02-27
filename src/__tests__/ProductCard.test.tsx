@@ -82,38 +82,31 @@ describe('ProductCard component', () => {
     expect(button).toHaveClass('text-gray-400');
   });
 
-  // TODO: move tests to ProductInfo.test.tsx
-  // it('should update cart item availability when stock changes', async () => {
-  //   const { rerender } = render(<ProductCard product={product} onAddToCart={onAddToCart} />);
+  it('should update cart item availability when stock changes', async () => {
+    const { rerender } = render(<ProductCard product={product} onAddToCart={onAddToCart} />);
 
-  //   (useCartContext as jest.Mock).mockReturnValue({
-  //     cart: {
-  //       items: [{ productId: '1', quantity: PRODUCT_INITIAL_CART_QUANTITY + 1 }]
-  //     }
-  //   });
+    (useCartContext as jest.Mock).mockReturnValue({
+      cart: {
+        items: { [product.id]: { productId: product.id, quantity: PRODUCT_INITIAL_CART_QUANTITY + 1 } }
+      }
+    });
 
-  //   rerender(<ProductCard product={{ ...product }} onAddToCart={onAddToCart} />);
-  //   expect(screen.getByText(`${PRODUCT_STOCK - PRODUCT_INITIAL_CART_QUANTITY - 1} available`)).toBeInTheDocument();
-  // });
+    rerender(<ProductCard product={{ ...product }} onAddToCart={onAddToCart} />);
+    expect(screen.getByText(`${PRODUCT_STOCK - PRODUCT_INITIAL_CART_QUANTITY - 1} available`)).toBeInTheDocument();
+  });
 
-  // it('should display "Maximum quantity in cart" if cart exceeds stock', () => {
-  //   const overstockCart = {
-  //     cart: {
-  //       items: [
-  //         { [product.id]: { productId: product.id, quantity: PRODUCT_STOCK + 1 } }
-  //       ]
-  //     }
-  //   };
+  it('should display "Maximum quantity in cart" if cart exceeds stock', () => {
+    const overstockCart = {
+      cart: {
+        items: { [product.id]: { productId: product.id, quantity: PRODUCT_STOCK + 1 } }
+      }
+    };
 
-  //   // (useCartContext as jest.Mock).mockReturnValue(overstockCart);
-  //   (useCartItemDetails as jest.Mock).mockImplementation((product) => {
-  //     return { isOutOfStock: false, availableStock: 5, formattedPrice: "$10" };
-  //   });
+    (useCartContext as jest.Mock).mockReturnValue(overstockCart);
+    render(<ProductCard product={product} onAddToCart={onAddToCart} />);
 
-  //   render(<ProductCard product={product} onAddToCart={onAddToCart} />);
-
-  //   expect(screen.getByText('Maximum quantity in cart')).toBeInTheDocument();
-  // });
+    expect(screen.getByText('Maximum quantity in cart')).toBeInTheDocument();
+  });
 
   it('should handle the scenario when no items are in the cart', () => {
     (useCartContext as jest.Mock).mockReturnValue({

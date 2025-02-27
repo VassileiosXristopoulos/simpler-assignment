@@ -1,5 +1,5 @@
-import { Discount } from "types";
-import { isValidUUID, formatPrice, getDiscountValue } from "utilities/utils";
+import { CartItem, Discount, Product } from "types";
+import { isValidUUID, formatPrice, getDiscountValue, calculateCartTotals } from "utilities/utils";
 
 describe('isValidUUID', () => {
   it('should return true for a valid UUID', () => {
@@ -89,5 +89,50 @@ describe('getDiscountValue', () => {
     const discount: Discount = { type: 'BOGO', code: "BOGO" };
     const result = getDiscountValue({ selectedDiscount: discount, total: 200, totalItems: 0 });
     expect(result).toBe(0); // No items, no discount
+  });
+});
+
+describe("calculateCartTotals", () => {
+  it("should correctly calculate total items and subtotal", () => {
+    const cartItems: Record<string, CartItem> = {
+      "p1": { productId: "p1", quantity: 2 },
+      "p2": { productId: "p2", quantity: 3 },
+    };
+    const products: Record<string, Product> = {
+      "p1": { id: "p1", name: "Product 1", price: 10, stock: 5 },
+      "p2": { id: "p2", name: "Product 2", price: 20, stock: 3 },
+    };
+    const result = calculateCartTotals(cartItems, products);
+    expect(result).toEqual({ totalItems: 5, subtotal: 80 });
+  });
+
+  it("should handle missing products and skip them", () => {
+    const cartItems: Record<string, CartItem> = {
+      "p1": { productId: "p1", quantity: 2 },
+      "p2": { productId: "p2", quantity: 3 },
+    };
+    const products: Record<string, Product> = {
+      "p1": { id: "p1", name: "Product 1", price: 10, stock: 5 },
+    };
+    const result = calculateCartTotals(cartItems, products);
+    expect(result).toEqual({ totalItems: 2, subtotal: 20 });
+  });
+
+  it("should return zero totals for an empty cart", () => {
+    const result = calculateCartTotals({}, {});
+    expect(result).toEqual({ totalItems: 0, subtotal: 0 });
+  });
+
+  it("should handle items with zero quantity", () => {
+    const cartItems: Record<string, CartItem> = {
+      "p1": { productId: "p1", quantity: 0 },
+      "p2": { productId: "p2", quantity: 3 },
+    };
+    const products: Record<string, Product> = {
+      "p1": { id: "p1", name: "Product 1", price: 10, stock: 5 },
+      "p2": { id: "p2", name: "Product 2", price: 20, stock: 3 },
+    };
+    const result = calculateCartTotals(cartItems, products);
+    expect(result).toEqual({ totalItems: 3, subtotal: 60 });
   });
 });
