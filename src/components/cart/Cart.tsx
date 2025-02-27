@@ -29,14 +29,6 @@ export function Cart() {
     }
   }, [])
 
-  if (cartError) {
-    return (
-      <div className="p-4 text-center">
-        <p className="text-red-600">{cartError}</p>
-      </div>
-    );
-  }
-
   if (!cart || Object.keys(cart.items ?? {}).length === 0) {
     return (
       <div className="p-4">
@@ -47,6 +39,10 @@ export function Cart() {
 
   return (
     <div className="p-4">
+      {cartError && <div className="p-4 text-center">
+        <p className="text-red-600">{cartError}</p>
+      </div>}
+      
       <CartItemList
         cartItems={cart.items}
         updateQuantity={updateQuantity}
@@ -65,7 +61,7 @@ export function Cart() {
 
         <Button
           onClick={handleCheckout}
-          disabled={checkoutInProgress}
+          disabled={checkoutInProgress || cartError.length > 0}
           className="w-full mt-4 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center justify-center"
         >
           Checkout

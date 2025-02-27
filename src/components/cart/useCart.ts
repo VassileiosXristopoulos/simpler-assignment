@@ -34,7 +34,7 @@ export function useCart() {
       if (String(err).includes("404")) {
         localStorage.removeItem(CART_ID_KEY);
       }
-      setCartError(String(err));
+      setCartError("Error while initializing the Cart: " + String(err));
     }
   }, [setCart, setCartError]);
 
@@ -54,7 +54,7 @@ export function useCart() {
         setCart(updatedCart);
       }
     } catch (err) {
-      setCartError(err instanceof Error ? err.message : 'Failed to add item to cart');
+      setCartError("Error while adding to Cart: " + (err instanceof Error ? err.message : 'Failed to add item to cart'));
     }
   };
 
@@ -72,7 +72,7 @@ export function useCart() {
         setCart(updatedCart);
       }
     } catch (err) {
-      setCartError(err instanceof Error ? err.message : 'Failed to update quantity');
+      setCartError("Error while updating Cart item quantity: " + (err instanceof Error ? err.message : 'Failed to update quantity'));
     }
   };
 
@@ -90,7 +90,7 @@ export function useCart() {
         setCart(updatedCart);
       }
     } catch (err) {
-      setCartError(err instanceof Error ? err.message : 'Failed to remove item');
+      setCartError("Error while removing from Cart: " + (err instanceof Error ? err.message : 'Failed to remove item'));
     }
   };
 
