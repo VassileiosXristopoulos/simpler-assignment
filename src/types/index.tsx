@@ -35,8 +35,22 @@ export interface CartAPI {
   total: number;
 }
 
-export interface Discount {
+export interface FlatDiscount {
   code: string;
   amount: number;
-  type: "FLAT" | "PERCENTAGE" | "BOGO";
+  type: "FLAT";
 }
+
+export interface PercentageDiscount {
+  code: string;
+  amount: number;
+  type: "PERCENTAGE";
+}
+
+export interface BogoDiscount {
+  code: string;
+  amount?: never;
+  type: "BOGO";
+}
+
+export type Discount = FlatDiscount | PercentageDiscount | BogoDiscount;
