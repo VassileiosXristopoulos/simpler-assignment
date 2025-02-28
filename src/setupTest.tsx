@@ -33,10 +33,4 @@ const customRenderHook = <T,>(
     ),
   });
 
-declare global {
-  var render: typeof customRender;
-  var renderHookWithProviders: typeof customRenderHook;
-}
-
-global.render = customRender;
-global.renderHookWithProviders = customRenderHook;
+export {customRender, customRenderHook}

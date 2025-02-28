@@ -5,6 +5,7 @@ import { useCart } from "components/cart/useCart";
 import { Cart, Product } from "types";
 import { CART_ID_KEY } from "utilities/constants";
 import { vi } from "vitest";
+import { customRenderHook } from "setupTest";
 
 const mockedUsedNavigate = vi.fn();
 vi.mock("react-router-dom", () => ({
@@ -40,7 +41,7 @@ describe("useCart", () => {
     (getCart as jest.Mock).mockResolvedValue(mockCart);
 
     const mockSetCart = vi.fn();
-    const { result } = global.renderHookWithProviders(() => useCart(), {
+    const { result } = customRenderHook(() => useCart(), {
       cart: mockCart,
       cartIsOpen: false,
       cartError: "",
@@ -66,7 +67,7 @@ describe("useCart", () => {
     (getCart as jest.Mock).mockRejectedValue(new Error("Failed to fetch cart"));
 
     const mockSetCartError = vi.fn();
-    const { result } = global.renderHookWithProviders(() => useCart(), {
+    const { result } = customRenderHook(() => useCart(), {
       cart: mockCart,
       cartIsOpen: false,
       cartError: "",
@@ -92,7 +93,7 @@ describe("useCart", () => {
     (getCart as jest.Mock).mockRejectedValue(new Error("404 Not Found"));
 
     const mockSetCartError = vi.fn();
-    const { result } = global.renderHookWithProviders(() => useCart(), {
+    const { result } = customRenderHook(() => useCart(), {
       cart: mockCart,
       cartIsOpen: false,
       cartError: "",
@@ -126,7 +127,7 @@ describe("useCart", () => {
     });
 
     const mockSetCart = vi.fn();
-    const { result } = global.renderHookWithProviders(() => useCart(), {
+    const { result } = customRenderHook(() => useCart(), {
       cart: mockEmptyCart,
       cartIsOpen: false,
       cartError: "",
@@ -162,7 +163,7 @@ describe("useCart", () => {
     });
 
     const mockSetCart = vi.fn();
-    const { result } = global.renderHookWithProviders(() => useCart(), {
+    const { result } = customRenderHook(() => useCart(), {
       cart: mockCartWithItem,
       cartIsOpen: false,
       cartError: "",
@@ -190,7 +191,7 @@ describe("useCart", () => {
     (updateCart as jest.Mock).mockRejectedValue(new Error("Failed to update cart"));
 
     const mockSetCartError = vi.fn();
-    const { result } = global.renderHookWithProviders(() => useCart(), {
+    const { result } = customRenderHook(() => useCart(), {
       cart: mockCart,
       cartIsOpen: false,
       cartError: "",
@@ -222,7 +223,7 @@ describe("useCart", () => {
     });
 
     const mockSetCart = vi.fn();
-    const { result } = global.renderHookWithProviders(() => useCart(), {
+    const { result } = customRenderHook(() => useCart(), {
       cart: mockCartWithItem,
       cartIsOpen: false,
       cartError: "",
@@ -253,7 +254,7 @@ describe("useCart", () => {
     (updateCart as jest.Mock).mockRejectedValue(new Error("Failed to update quantity"));
 
     const mockSetCartError = vi.fn();
-    const { result } = global.renderHookWithProviders(() => useCart(), {
+    const { result } = customRenderHook(() => useCart(), {
       cart: mockCart,
       cartIsOpen: false,
       cartError: "",
@@ -284,7 +285,7 @@ describe("useCart", () => {
     (updateCart as jest.Mock).mockResolvedValue({ id: mockCart.id, items: {} });
 
     const mockSetCart = vi.fn();
-    const { result } = global.renderHookWithProviders(() => useCart(), {
+    const { result } = customRenderHook(() => useCart(), {
       cart: mockCartWithItem,
       cartIsOpen: false,
       cartError: "",
@@ -310,7 +311,7 @@ describe("useCart", () => {
     (updateCart as jest.Mock).mockRejectedValue(new Error("Failed to remove item"));
 
     const mockSetCartError = vi.fn();
-    const { result } = global.renderHookWithProviders(() => useCart(), {
+    const { result } = customRenderHook(() => useCart(), {
       cart: mockCart,
       cartIsOpen: false,
       cartError: "",
@@ -336,7 +337,7 @@ describe("useCart", () => {
     const mockClearCart = vi.fn();
     const mockSetCartIsOpen = vi.fn();
   
-    const { result } = global.renderHookWithProviders(() => useCart(), {
+    const { result } = customRenderHook(() => useCart(), {
       cart: mockCart,
       cartIsOpen: false,
       cartError: "",
@@ -363,7 +364,7 @@ describe("useCart", () => {
   it("should handle checkout failure", async () => {
     (addOrder as jest.Mock).mockRejectedValue(new Error("Checkout failed"));
   
-    const { result } = global.renderHookWithProviders(() => useCart(), {
+    const { result } = customRenderHook(() => useCart(), {
       cart: mockCart,
       cartIsOpen: false,
       cartError: "",

@@ -1,7 +1,8 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import { Button } from 'components/buttons/Button';
 import { vi } from 'vitest';
 import { Trash2 } from 'lucide-react';
+import { customRender as render } from 'setupTest';
 
 describe('Button', () => {
   it('renders button text', () => {
@@ -24,7 +25,6 @@ describe('Button', () => {
 
   it('applies custom styles', () => {
     render(<Button styles={{ backgroundColor: 'red' }}>Styled</Button>);
-    screen.debug()
     expect(screen.getByRole('button')).toHaveStyle({ backgroundColor: 'red' });
   });
 
@@ -38,3 +38,4 @@ describe('Button', () => {
     expect(screen.getByRole('button')).toBeDisabled();
   });
 });
+
