@@ -30,10 +30,11 @@ export function getDiscountValue({ selectedDiscount, totalItems = 0, total = 0 }
     case "BOGO":
       // Buy One Get One Free: Assume every second item is free
       if (totalItems === 0) return 0;
-      const freeItems = Math.floor(totalItems / 2);
-      const discountPerItem = total / totalItems;
-      return freeItems * discountPerItem;
-
+      {
+        const freeItems = Math.floor(totalItems / 2);
+        const discountPerItem = total / totalItems;
+        return freeItems * discountPerItem;
+      }
     default:
       return 0;
   }
