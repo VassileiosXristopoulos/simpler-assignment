@@ -1,8 +1,8 @@
 import { memo, useCallback } from 'react';
-import { Product } from '../../types';
+import { Product } from '../../../types';
 import { useCartContext } from 'contexts/CartContext';
 import { ProductInfo } from './ProductInfo';
-import BaseCard from './BaseCard';
+import BaseCard from '../BaseCard';
 import { AddToCartButton } from 'components/buttons/AddToCardButton';
 import { useCartItemDetails } from 'hooks/useCartItemDetails';
 

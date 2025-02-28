@@ -1,5 +1,5 @@
 import { DefaultLayout } from 'layouts/DefaultLayout'
-import { ProductList } from 'components/ProductList/ProductList';
+import { ProductList } from 'components/ProductList'
 
 export default function Shop() {
 

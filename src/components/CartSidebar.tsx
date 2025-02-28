@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { Button } from '../buttons/Button';
+import { Button } from './buttons/Button';
 import { Cart } from 'components/cart/Cart';
 import { useCartContext } from 'contexts/CartContext';
 

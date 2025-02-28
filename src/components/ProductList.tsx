@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ProductCard } from 'components/cards/ProductCard';
+import { ProductCard } from 'components/cards/ProductCard/ProductCard';
 import { LoadingSpinner } from 'components/LoadingSpinner';
 import { useProductContext } from 'contexts/ProductContext';
 import { getProducts } from 'api/productsApi'
