@@ -7,7 +7,7 @@ interface CartItemListProps {
   removeItem: (productId: string) => void;
 }
 
-const CartItemList: React.FC<CartItemListProps> = ({ cartItems, updateQuantity, removeItem }) => (
+const CartItemList = ({ cartItems, updateQuantity, removeItem }: CartItemListProps) => (
   <div className="space-y-4">
     {cartItems && Object.values(cartItems).map((item) => (
       <CartItem

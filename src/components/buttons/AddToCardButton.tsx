@@ -25,3 +25,4 @@ export const AddToCartButton = memo(({ onAddToCart, isOutOfStock, isCartAvailabl
     {isOutOfStock ? 'Max Quantity' : 'Add to Cart'}
   </Button>
 ));
+AddToCartButton.displayName = "AddToCartButton";

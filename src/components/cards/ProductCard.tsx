@@ -39,3 +39,4 @@ export const ProductCard = memo(({ product, onAddToCart }: ProductCardProps) => 
     </BaseCard>
   );
 });
+ProductCard.displayName = "ProductCard";

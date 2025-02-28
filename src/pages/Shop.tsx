@@ -22,7 +22,7 @@ export default function Shop() {
         setProducts(retrievedProducts)
       }
     } catch (error) {
-      setError("Error while fetching products");
+      setError("Error while fetching products: " + String(error));
     } finally {
       setProductsLoading(false)
     }

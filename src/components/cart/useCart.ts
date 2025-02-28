@@ -42,7 +42,7 @@ export function useCart() {
     if (!cart?.id) return;
 
     try {
-      let updatedCartItems: Record<string, CartItem> = { ...cart.items };
+      const updatedCartItems: Record<string, CartItem> = { ...cart.items };
       
       // If the item is already in the cart, add to it's quantity, otherwise initialize with the given quantity
       updatedCartItems[product.id] = updatedCartItems[product.id]
@@ -102,7 +102,7 @@ export function useCart() {
       setCartIsOpen(false)
       navigate('/order-success')
     } catch (error) {
-      throw new Error("error completing order");
+      throw new Error("error completing order: " + String(error));
     }
   }
 

@@ -7,7 +7,7 @@ interface PriceSummaryProps {
   selectedDiscount: Discount | null;
 }
 
-const PriceSummary: React.FC<PriceSummaryProps> = ({ subtotal, discountValue, selectedDiscount }) => (
+const PriceSummary = ({ subtotal, discountValue, selectedDiscount }: PriceSummaryProps) => (
   <div className="space-y-2 text-right">
     <p className="text-gray-600">
       Subtotal: {formatPrice(subtotal)}

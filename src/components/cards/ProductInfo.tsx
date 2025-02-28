@@ -19,3 +19,5 @@ export const ProductInfo = memo(({ name, formattedPrice, availableStock, isOutOf
     </div>
   </>
 ));
+ProductInfo.displayName = "ProductInfo";
+
