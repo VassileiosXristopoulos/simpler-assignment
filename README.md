@@ -22,7 +22,7 @@ Make sure you have the following installed on your system:
 ### Installation
 1. Clone the repository:
    ```sh
-   git clone <repository_url>
+   git clone https://github.com/VassileiosXristopoulos/simpler-assignment
    cd simpler-assignment
    ```
 
