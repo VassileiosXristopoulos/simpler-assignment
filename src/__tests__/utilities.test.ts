@@ -79,9 +79,15 @@ describe('getDiscountValue', () => {
     expect(result).toBe(10); // 5% of 200 is 10
   });
 
-  it('should return the correct discount for BOGO type when totalItems is greater than 0', () => {
+  it('should return the correct discount for BOGO type when totalItems is even', () => {
     const discount: Discount = { type: 'BOGO', code: "BOGO" }; // BOGO doesn't use the amount
     const result = getDiscountValue({ selectedDiscount: discount, total: 200, totalItems: 4 });
+    expect(result).toBe(100); // 2 items free (total 4 items), each item worth 50, so total free value = 2 * 50 = 100
+  });
+ 
+  it('should return the correct discount for BOGO type when totalItems is odd', () => {
+    const discount: Discount = { type: 'BOGO', code: "BOGO" }; // BOGO doesn't use the amount
+    const result = getDiscountValue({ selectedDiscount: discount, total: 250, totalItems: 5 });
     expect(result).toBe(100); // 2 items free (total 4 items), each item worth 50, so total free value = 2 * 50 = 100
   });
 
