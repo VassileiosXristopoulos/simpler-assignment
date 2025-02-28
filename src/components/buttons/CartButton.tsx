@@ -10,9 +10,9 @@ type CartButtonProps = {
   icon?: JSX.Element;
 }
 export default function CartButton({ onClick, className, icon }: CartButtonProps) {
-  const { subtotal } = useCart();
+  const { subtotal, totalItems } = useCart();
   const { setCartIsOpen, cartError, selectedDiscount } = useCartContext();
-  const discountValue = useMemo(() => getDiscountValue({ selectedDiscount, total: subtotal }),
+  const discountValue = useMemo(() => getDiscountValue({ selectedDiscount, total: subtotal, totalItems: totalItems }),
     [selectedDiscount, subtotal]);
     
   /**

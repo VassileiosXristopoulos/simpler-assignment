@@ -14,11 +14,12 @@ export function Cart() {
     updateQuantity,
     removeItem,
     subtotal,
-    initializeCart
+    initializeCart,
+    totalItems
   } = useCart();
 
   const { cart, cartError, selectedDiscount, setSelectedDiscount, clearDiscount } = useCartContext();
-  const discountValue = useMemo(() => getDiscountValue({ selectedDiscount, total: subtotal }),
+  const discountValue = useMemo(() => getDiscountValue({ selectedDiscount, total: subtotal, totalItems: totalItems }),
     [selectedDiscount, subtotal]);
   const { isSubmitting: checkoutInProgress, error: checkoutError, handleCheckout } = useCheckout(onCheckout);
 
