@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, ArrowLeft } from 'lucide-react';
 import CartButton from './buttons/CartButton';
+import { memo } from 'react';
 
 interface HeaderProps {
   cartVisible?: boolean;
@@ -9,7 +10,7 @@ interface HeaderProps {
   backButtonPath?: string;
 }
 
-export function Header({ cartVisible = true, title, backButtonText, backButtonPath }: HeaderProps) {
+function Header({ cartVisible = true, title, backButtonText, backButtonPath }: HeaderProps) {
   const navigate = useNavigate();
 
   return (
@@ -40,3 +41,5 @@ export function Header({ cartVisible = true, title, backButtonText, backButtonPa
     </div>
   );
 }
+export default memo(Header)
+Header.displayName = "Header";

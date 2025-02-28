@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header } from '../components/Header';
+import Header from '../components/Header';
 import { ErrorBoundary } from 'components/ErrorBoundary';
 import { CartSidebar } from 'components/cartSidebar/CartSidebar';
 import { useCartContext } from 'contexts/CartContext';
