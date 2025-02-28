@@ -84,7 +84,7 @@ describe("useCart", () => {
       await result.current.initializeCart();
     })
 
-    expect(mockSetCartError).toHaveBeenCalledWith("Error: Failed to fetch cart");
+    expect(mockSetCartError).toHaveBeenCalledWith("Error while initializing the Cart: Error: Failed to fetch cart");
   });
 
   it("should remove localStorage cartId on 404 error", async () => {
@@ -272,7 +272,7 @@ describe("useCart", () => {
       await result.current.updateQuantity("p1", 3);
     });
 
-    expect(mockSetCartError).toHaveBeenCalledWith("Failed to update quantity");
+    expect(mockSetCartError).toHaveBeenCalledWith("Error while updating Cart item quantity: Failed to update quantity");
   });
 
   it("should remove an item from the cart", async () => {
@@ -328,7 +328,7 @@ describe("useCart", () => {
       await result.current.removeItem(mockProduct.id);
     });
 
-    expect(mockSetCartError).toHaveBeenCalledWith("Failed to remove item");
+    expect(mockSetCartError).toHaveBeenCalledWith("Error while removing from Cart: Failed to remove item");
   });
   
   it("should complete checkout and navigate to success page", async () => {
